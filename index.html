@@ -9,30 +9,37 @@
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Karla:wght@200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <title>mostlywork.ing</title>
 <style>
   :root {
     color-scheme: light dark;
     --bg: #fff;
     --fg: #111;
-    --fg-2: #555;
-    --muted: #8a8a8a;
-    --line: #e6e6e6;
+    --fg-2: #616161;
+    --muted: #9a9a9a;
+    --line: #dcdcdc;
+    --hover: #f5f5f5;
+    --tick: #b4b4b4;
+    --ring: transparent;
     --accent: #2b4bff;
-    --sans: "Karla", ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
-    --side: 248px;
+    --beta: #f59e0b;
+    --live: #16a34a;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+    --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --ease: cubic-bezier(.65, 0, .25, 1);
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #111;
-      --fg: #eee;
-      --fg-2: #aaa;
-      --muted: #8a8a8a;
+      --bg: #0e0e0e;
+      --fg: #ededed;
+      --fg-2: #a3a3a3;
+      --muted: #6f6f6f;
       --line: #262626;
+      --hover: #151515;
+      --tick: #3d3d3d;
+      --ring: rgba(255, 255, 255, .12);
       --accent: #7088ff;
     }
   }
@@ -47,255 +54,300 @@
   }
 
   body {
-    font-family: var(--sans);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
-  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: #fff; }
 
-  button {
-    font: inherit;
-    color: inherit;
-    background: none;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-  }
+  a { color: inherit; text-decoration: none; }
 
   :focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline-offset: -2px;
   }
 
-  /* ---------- layout ---------- */
+  h1, h2, h3, h4, p, ul, dl, dd { margin: 0; }
+  ul { list-style: none; padding: 0; }
+
+  /* ---------- panel ---------- */
 
   .page {
     display: grid;
-    grid-template-columns: var(--side) minmax(0, 1fr);
-    min-height: 100vh;
+    grid-template-columns: 300px minmax(0, 1fr);
   }
+
+  .products {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* ---------- side ---------- */
 
   .side {
     position: sticky;
     top: 0;
     height: 100vh;
+    min-height: 600px;
     overflow-y: auto;
-    padding: 44px 24px 36px 40px;
+    border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
+    padding: 20px;
   }
 
-  .logo {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 14px;
-    align-self: flex-start;
-    margin-bottom: 52px;
-  }
-
-  .logo svg {
-    width: 44px;
+  .mark {
+    display: block;
+    width: 100%;
     height: auto;
-    animation: tick 18s var(--ease) infinite;
+    margin-bottom: 28px;
   }
 
-  .logo:hover svg { animation-duration: 3s; }
+  .mark .txt {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .04em;
+    fill: currentColor;
+  }
 
-  .logo span {
+  .mark .net { fill: none; stroke: var(--accent); stroke-width: 1; }
+  .mark .node { fill: var(--accent); }
+
+  .side h1 {
+    font-size: 15px;
     font-weight: 700;
-    font-size: 19px;
     letter-spacing: -.01em;
   }
 
-  @keyframes tick {
-    0%, 13%      { transform: rotate(0deg); }
-    16.66%, 29.66% { transform: rotate(60deg); }
-    33.33%, 46.33% { transform: rotate(120deg); }
-    50%, 63%     { transform: rotate(180deg); }
-    66.66%, 79.66% { transform: rotate(240deg); }
-    83.33%, 96.33% { transform: rotate(300deg); }
-    100%         { transform: rotate(360deg); }
-  }
-
-  .menu {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .menu li { margin: 0; }
-
-  .menu button,
-  .menu a {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1;
-    padding: 8px 0;
-    letter-spacing: -.005em;
-    transition: opacity .2s;
-  }
-
-  .types button { opacity: .38; }
-  .types button:hover,
-  .types button[aria-pressed="true"] { opacity: 1; }
-
-  .types sup {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--muted);
-    margin-left: -4px;
-    align-self: flex-start;
-  }
-
-  .ico {
-    width: 12px;
-    height: 12px;
-    flex: none;
-    fill: currentColor;
-    transition: transform .5s var(--ease);
-  }
-
-  .types [aria-pressed="true"] .ico { transform: rotate(45deg); }
-
-  .rule {
-    height: 1px;
-    background: var(--line);
-    border: 0;
-    margin: 18px 0;
-  }
-
-  .sectors button { gap: 6px; opacity: .38; }
-  .sectors button:hover,
-  .sectors button[aria-pressed="true"] { opacity: 1; }
-
-  .chev {
-    width: 12px;
-    height: 12px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-    transition: transform .35s var(--ease);
-  }
-
-  .sectors [aria-pressed="true"] .chev { transform: rotate(90deg); }
-
-  .projects a { gap: 8px; }
-
-  .projects a::after {
-    content: "\2197";
-    font-weight: 400;
-    font-size: 14px;
-    opacity: 0;
-    transform: translate(-4px, 2px);
-    transition: opacity .2s, transform .3s var(--ease);
-  }
-
-  .projects a:hover::after,
-  .projects a:focus-visible::after { opacity: 1; transform: none; }
-
-  .about {
-    margin-top: auto;
-    padding-top: 40px;
-    font-size: 14px;
-    line-height: 1.5;
+  .blurb {
+    margin-top: 6px;
     color: var(--fg-2);
-    max-width: 180px;
   }
 
-  .about p { margin: 0 0 12px; }
+  .caret {
+    display: inline-block;
+    width: .6em;
+    height: 1.15em;
+    margin-left: 2px;
+    vertical-align: -.2em;
+    background: var(--fg);
+    animation: blink 1.1s steps(1) infinite;
+  }
 
-  .copy {
-    font-family: var(--mono);
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .label {
+    margin: 32px 0 6px;
     font-size: 11px;
     color: var(--muted);
   }
 
-  /* ---------- grid ---------- */
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: clamp(20px, 3vw, 56px);
-    row-gap: clamp(36px, 4.5vw, 80px);
-    padding: 40px clamp(20px, 3.5vw, 64px) 96px clamp(8px, 1.5vw, 24px);
-    align-content: start;
-    overflow-x: clip;
+  .rows li > * {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
   }
 
-  .tile {
-    display: block;
-    min-width: 0;
-    transition: opacity .35s;
+  .rows .k {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    align-items: baseline;
+    white-space: nowrap;
   }
 
-  .tile[hidden] { display: none; }
+  .rows .k::after {
+    content: "";
+    flex: 1;
+    min-width: 12px;
+    border-bottom: 1px dotted var(--tick);
+  }
 
-  .grid.dim .tile:not(.hl) { opacity: .18; }
+  .rows a:hover .v { text-decoration: underline; text-underline-offset: 3px; }
+  .rows a .v::after { content: " \2197"; }
+  .rows .soon { color: var(--muted); }
+
+  .foot {
+    margin-top: auto;
+    padding-top: 32px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .foot .rows { margin-bottom: 4px; }
+  .foot time { color: var(--fg); font-variant-numeric: tabular-nums; }
+
+  /* ---------- product cells ---------- */
+
+  .product {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: max(100vh, 640px);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background-color .25s;
+  }
+
+  .product:nth-child(3n) { border-right: 0; }
+  .product:hover { background: var(--hover); }
+
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 41px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--fg-2);
+  }
+
+  .led::before {
+    content: "\25CF";
+    margin-right: 6px;
+    color: var(--live);
+  }
+
+  .led.beta::before {
+    color: var(--beta);
+    animation: blink 2.2s steps(1) infinite;
+  }
 
   .art {
     position: relative;
-    aspect-ratio: 4 / 3;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    container-type: size;
+    display: grid;
+    place-items: center;
+    /* registration crosses in each corner */
+    --x: linear-gradient(var(--tick), var(--tick));
+    background:
+      var(--x) 14px 18px / 9px 1px no-repeat, var(--x) 18px 14px / 1px 9px no-repeat,
+      var(--x) right 14px top 18px / 9px 1px no-repeat, var(--x) right 18px top 14px / 1px 9px no-repeat,
+      var(--x) left 14px bottom 18px / 9px 1px no-repeat, var(--x) left 18px bottom 14px / 1px 9px no-repeat,
+      var(--x) right 14px bottom 18px / 9px 1px no-repeat, var(--x) right 18px bottom 14px / 1px 9px no-repeat;
+  }
+
+  .stage {
+    position: relative;
+    width: min(100cqw - 40px, 66cqh);
+    aspect-ratio: 2 / 3;
     container-type: inline-size;
     transition: transform .6s var(--ease);
   }
 
-  a.tile:hover .art { transform: translateY(-6px); }
+  .product:hover .stage { transform: translateY(-1.5%); }
 
-  .art svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
+  .info {
+    padding: 18px 20px 20px;
+    border-top: 1px solid var(--line);
   }
 
-  .cap { padding-top: 14px; }
-
-  .cap h2 {
-    margin: 0;
-    font-size: clamp(16px, 1.25vw, 19px);
-    font-weight: 600;
-    line-height: 1.25;
-    letter-spacing: -.005em;
+  .info h2 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.2;
   }
 
-  .cap h2 span { font-weight: 400; color: var(--fg-2); }
-
-  a.tile .cap h2::after {
-    content: " \2197";
+  .info h2 span {
     font-weight: 400;
-    opacity: 0;
-    transition: opacity .2s;
+    transition: transform .35s var(--ease);
   }
 
-  a.tile:hover .cap h2::after,
-  a.tile:focus-visible .cap h2::after { opacity: 1; }
+  .product:hover .info h2 span { transform: translate(3px, -3px); }
 
-  .cap p {
-    margin: 4px 0 0;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .02em;
-    color: var(--muted);
+  .desc {
+    margin-top: 2px;
+    color: var(--fg-2);
   }
 
-  /* paused: off-screen tiles and reduced motion */
-  .is-paused .art,
-  .is-paused .art *,
-  .is-paused .art *::before,
-  .is-paused .art *::after {
-    animation-play-state: paused !important;
+  .info .rows { margin-top: 14px; font-size: 12px; }
+  .info .rows .k { color: var(--fg-2); }
+
+  .go {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding: 9px 12px;
+    border: 1px solid var(--fg);
+    font-size: 12px;
+    transition: background-color .2s, color .2s;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .art, .art *, .art *::before, .art *::after, .logo svg {
-      animation-play-state: paused !important;
-    }
-    .art, .tile { transition: none; }
+  .product:hover .go { background: var(--fg); color: var(--bg); }
+
+  /* ---------- devices ---------- */
+
+  .phone {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 64cqw;
+    aspect-ratio: 46 / 94;
+    translate: -50% -50%;
+    padding: 2cqw;
+    border-radius: 10.6cqw;
+    background: #111;
+    box-shadow: 0 0 0 1px var(--ring), 0 3cqw 6cqw -2cqw rgba(0, 0, 0, .35);
+    container-type: inline-size;
+  }
+
+  .screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 14.2cqw;
+    font-family: var(--ui);
+    line-height: 1.2;
+  }
+
+  .status {
+    position: absolute;
+    top: 5cqw;
+    left: 8cqw;
+    right: 8cqw;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 4.6cqw;
+    font-weight: 700;
+  }
+
+  .island {
+    width: 26cqw;
+    height: 7.4cqw;
+    border-radius: 4cqw;
+    background: #000;
+  }
+
+  .bars { display: flex; gap: 1.1cqw; }
+  .bars i { width: 1.9cqw; height: 3.2cqw; border-radius: .6cqw; background: currentColor; }
+
+  .browser {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100cqw;
+    translate: -50% -50%;
+    padding: 0 1cqw 1cqw;
+    border-radius: 3.2cqw;
+    background: #111;
+    box-shadow: 0 0 0 1px var(--ring), 0 3cqw 6cqw -2cqw rgba(0, 0, 0, .35);
+    container-type: inline-size;
+    font-family: var(--ui);
+    line-height: 1.2;
   }
 
   /* ---------- 01 Macro ---------- */
@@ -318,6 +370,8 @@
     --cool-ink: #1c9e4f;
     --hot-ink: #e5484d;
     --mix: calc(var(--lvl) * 100%);
+    background: #fff;
+    color: #111;
     animation: drag 9s ease-in-out infinite;
   }
 
@@ -332,102 +386,48 @@
     100% { --lvl: .47; --kcal: 520; }
   }
 
-  .macro .glow {
-    position: absolute;
-    inset: 4% 18%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink)) 0%, transparent 100%);
-    opacity: .28;
-    filter: blur(4cqw);
-  }
-
-  .macro .phone {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 30cqw;
-    height: 60cqw;
-    translate: -50% -50%;
-    border-radius: 5cqw;
-    background: #111;
-    padding: 1cqw;
-    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 3cqw 6cqw -2cqw rgba(0,0,0,.35);
-  }
-
-  .macro .screen {
-    position: relative;
-    height: 100%;
-    border-radius: 4cqw;
-    overflow: hidden;
-    background: #fff;
-    color: #111;
-    font-family: var(--sans);
-  }
-
   .macro .fill {
     position: absolute;
     inset: 0;
     background: color-mix(in oklab, var(--hot) var(--mix), var(--cool));
-    border-top: .25cqw solid color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink));
+    border-top: .8cqw solid color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink));
     transform: translateY(calc((1 - var(--lvl)) * 100%));
   }
 
   .macro .touch {
     position: absolute;
-    top: -2.4cqw;
+    top: -7.6cqw;
     left: 60%;
-    width: 4.6cqw;
-    height: 4.6cqw;
+    width: 15cqw;
+    height: 15cqw;
     border-radius: 50%;
-    background: rgba(0,0,0,.14);
-    box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.7);
+    background: rgba(0, 0, 0, .14);
+    box-shadow: inset 0 0 0 1cqw rgba(255, 255, 255, .7);
   }
-
-  .macro .status {
-    position: absolute;
-    top: 1.6cqw;
-    left: 2.6cqw;
-    right: 2.6cqw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.5cqw;
-    font-weight: 700;
-  }
-
-  .macro .island {
-    width: 8cqw;
-    height: 2.2cqw;
-    border-radius: 2cqw;
-    background: #111;
-  }
-
-  .macro .bars { display: flex; gap: .35cqw; }
-  .macro .bars i { width: .6cqw; height: 1cqw; background: #111; border-radius: .2cqw; }
 
   .macro .adding {
     position: absolute;
-    top: 5.4cqw;
-    left: 2.6cqw;
-    font-size: 1.3cqw;
+    top: 17cqw;
+    left: 8cqw;
+    font-size: 4.2cqw;
     color: #999;
   }
 
-  .macro .adding b { color: #111; font-weight: 700; }
+  .macro .adding b { color: #111; }
 
   .macro .read {
     position: absolute;
     left: 0;
     right: 0;
-    top: 46%;
+    top: 44%;
     display: flex;
     flex-direction: column;
     align-items: center;
     line-height: 1;
   }
 
-  .macro .label {
-    font-size: 1.15cqw;
+  .macro .tag {
+    font-size: 3.6cqw;
     font-weight: 700;
     letter-spacing: .18em;
     text-transform: uppercase;
@@ -436,760 +436,774 @@
 
   .macro .num {
     counter-reset: k var(--kcal);
-    font-size: 10.5cqw;
+    margin: 2cqw 0 1.2cqw;
+    font-size: 33cqw;
     font-weight: 200;
     letter-spacing: -.03em;
-    margin: .6cqw 0 .4cqw;
   }
 
   .macro .num::after { content: counter(k); }
-
-  .macro .unit { font-size: 1.4cqw; color: #8a8a8a; }
+  .macro .unit { font-size: 4.4cqw; color: #8a8a8a; }
 
   .macro .cancel {
     position: absolute;
-    bottom: 3cqw;
+    bottom: 9cqw;
     left: 50%;
     translate: -50% 0;
-    font-size: 1.3cqw;
+    padding: 2.8cqw 6.5cqw;
+    border-radius: 6cqw;
+    font-size: 4.2cqw;
     font-weight: 600;
-    padding: .9cqw 2cqw;
-    border-radius: 2cqw;
-    background: rgba(255,255,255,.75);
-    box-shadow: 0 0 0 .15cqw rgba(0,0,0,.08);
-  }
-
-  .macro .appicon {
-    position: absolute;
-    left: 19cqw;
-    top: 13cqw;
-    width: 11cqw;
-    height: 11cqw;
-    rotate: -9deg;
-    animation: bob 6s ease-in-out infinite;
-    filter: drop-shadow(0 1.2cqw 1.2cqw rgba(0,0,0,.18));
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .macro .appicon rect:first-child { stroke: rgba(255,255,255,.16); stroke-width: 4; }
-    .scene .ticket { background: #1b1b1b; }
-    .scene .date { background: #282828; }
-  }
-
-  @keyframes bob {
-    0%, 100% { translate: 0 0; }
-    50%      { translate: 0 -2cqw; }
+    background: rgba(255, 255, 255, .75);
+    box-shadow: 0 0 0 .5cqw rgba(0, 0, 0, .08);
   }
 
   /* ---------- 02 Scene ---------- */
 
-  .scene .stack {
-    position: absolute;
-    left: 50%;
-    top: 45%;
-    width: 64cqw;
-    height: 25cqw;
-    translate: -50% -50%;
-  }
-
-  .scene .stub {
-    position: absolute;
-    inset: 0;
-    filter: drop-shadow(0 1.4cqw 1.6cqw rgba(0,0,0,.22));
-    animation: shuffle 10.5s cubic-bezier(.6, 0, .3, 1) infinite;
-    will-change: transform;
-  }
-
-  .scene .stub:nth-child(2) { animation-delay: -3.5s; }
-  .scene .stub:nth-child(3) { animation-delay: -7s; }
-
-  @keyframes shuffle {
-    0%, 22%      { transform: translate(0, 0) rotate(-3deg); z-index: 3; }
-    22.01%       { z-index: 4; }
-    28%          { transform: translate(12cqw, -18cqw) rotate(8deg); z-index: 4; }
-    28.01%       { z-index: 1; }
-    33.3%, 55.3% { transform: translate(5cqw, -8cqw) rotate(7deg) scale(.9); z-index: 1; }
-    55.4%        { z-index: 2; }
-    66.6%, 88.7% { transform: translate(2.5cqw, -4cqw) rotate(2deg) scale(.95); z-index: 2; }
-    88.8%        { z-index: 3; }
-    100%         { transform: translate(0, 0) rotate(-3deg); z-index: 3; }
-  }
-
-  .scene .ticket {
-    --nx: calc(100% - 12.5cqw);
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 12.5cqw;
-    border-radius: 1.6cqw;
-    background: #151515;
+  .scene {
+    background: #000;
     color: #fff;
-    font-family: var(--sans);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
-    -webkit-mask:
-      radial-gradient(circle at var(--nx) 0, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) top / 100% 51% no-repeat,
-      radial-gradient(circle at var(--nx) 100%, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) bottom / 100% 51% no-repeat;
-            mask:
-      radial-gradient(circle at var(--nx) 0, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) top / 100% 51% no-repeat,
-      radial-gradient(circle at var(--nx) 100%, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) bottom / 100% 51% no-repeat;
   }
 
-  .scene .main {
+  .scene .plus {
+    position: absolute;
+    top: 15cqw;
+    right: 7cqw;
+    width: 11cqw;
+    height: 11cqw;
     display: grid;
-    grid-template-columns: 9.5cqw minmax(0, 1fr);
-    align-items: center;
-    column-gap: 2.6cqw;
-    padding: 0 2.4cqw 0 3.4cqw;
+    place-items: center;
+    border-radius: 50%;
+    background: #1c1c1e;
+    font-size: 8cqw;
+    font-weight: 300;
   }
-
-  .scene .date {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
-    padding: 1.9cqw 0;
-    border-radius: 1.1cqw;
-    background: #222;
-  }
-
-  .scene .date b { font-size: 5.2cqw; font-weight: 700; letter-spacing: -.02em; }
-  .scene .date small { font-size: 1.35cqw; letter-spacing: .16em; color: #8d8d8d; margin-top: .6cqw; }
 
   .scene h3 {
-    margin: 0 0 .8cqw;
-    font-size: 2.8cqw;
+    position: absolute;
+    top: 33cqw;
+    left: 7cqw;
+    font-size: 10cqw;
     font-weight: 700;
-    line-height: 1.1;
-    text-wrap: balance;
+    letter-spacing: -.02em;
   }
 
-  .scene .venue { margin: 0; font-size: 1.75cqw; color: #8d8d8d; }
-  .scene .stars { margin: 1.2cqw 0 0; font-size: 2cqw; color: #f5c443; letter-spacing: .12em; }
-  .scene .via { margin: 1.2cqw 0 0; font-size: 1.6cqw; color: #6f6f6f; }
+  .scene .gigs {
+    position: absolute;
+    top: 54cqw;
+    left: 5cqw;
+    right: 5cqw;
+    bottom: 0;
+    -webkit-mask: linear-gradient(#000 calc(100% - 34cqw), transparent calc(100% - 24cqw));
+            mask: linear-gradient(#000 calc(100% - 34cqw), transparent calc(100% - 24cqw));
+  }
 
-  .scene .end {
+  .scene .gig {
+    display: grid;
+    grid-template-rows: 1fr;
+    margin-bottom: 4cqw;
+    transition: grid-template-rows .6s var(--ease), opacity .6s, margin-bottom .6s var(--ease);
+  }
+
+  .scene .gig.new { grid-template-rows: 0fr; opacity: 0; margin-bottom: 0; }
+  .scene .clip { min-height: 0; overflow: hidden; }
+
+  .scene .card {
+    display: grid;
+    grid-template-columns: 12cqw minmax(0, 1fr);
+    align-items: center;
+    gap: 3cqw;
+    padding: 7.5cqw 5cqw;
+    border-radius: 5cqw;
+    background: #1c1c1e;
+  }
+
+  .scene .d { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .scene .d b { font-size: 7.4cqw; }
+  .scene .d small { margin-top: 1cqw; font-size: 2.3cqw; letter-spacing: .1em; color: #8d8d8d; }
+
+  .scene .t b,
+  .scene .t small {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .scene .t b { font-size: 4.4cqw; font-weight: 600; }
+  .scene .t small { margin-top: 1.4cqw; font-size: 3cqw; color: #8d8d8d; }
+
+  .scene .tabs {
+    position: absolute;
+    left: 5cqw;
+    right: 25cqw;
+    bottom: 5cqw;
+    height: 16cqw;
+    display: flex;
+    align-items: center;
+    padding: 0 1.6cqw;
+    border-radius: 8cqw;
+    background: rgba(28, 28, 30, .94);
+    box-shadow: 0 -6cqw 8cqw 2cqw #000;
+  }
+
+  .scene .tabs span {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6cqw;
+    padding: 1.6cqw 0;
+    border-radius: 6cqw;
+    font-size: 2.3cqw;
+    color: #b8b8b8;
+  }
+
+  .scene .tabs i { font-style: normal; font-size: 4.4cqw; line-height: 1; }
+  .scene .tabs .on { background: #3a3a3c; color: #fff; }
+
+  .scene .search {
+    position: absolute;
+    right: 5cqw;
+    bottom: 5cqw;
+    width: 16cqw;
+    height: 16cqw;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #1c1c1e;
+  }
+
+  .scene .search svg { width: 6cqw; height: 6cqw; fill: none; stroke: #fff; stroke-width: 2.4; }
+
+  /* the ticket stub that gets scanned into the app */
+
+  .stub {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: 54cqw;
+    aspect-ratio: 44 / 19;
+    container-type: inline-size;
+    filter: drop-shadow(0 2cqw 2.4cqw rgba(0, 0, 0, .28));
+    transform: translate(1cqw, 104cqw) rotate(-7deg);
+    will-change: transform, opacity;
+  }
+
+  .ticket {
+    --nx: calc(100% - 20cqw);
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20cqw;
+    border-radius: 3cqw;
+    background: #161616;
+    color: #fff;
+    font-family: var(--ui);
+    line-height: 1.15;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+    -webkit-mask:
+      radial-gradient(circle at var(--nx) 0, #0000 3cqw, #000 calc(3cqw + .5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at var(--nx) 100%, #0000 3cqw, #000 calc(3cqw + .5px)) bottom / 100% 51% no-repeat;
+            mask:
+      radial-gradient(circle at var(--nx) 0, #0000 3cqw, #000 calc(3cqw + .5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at var(--nx) 100%, #0000 3cqw, #000 calc(3cqw + .5px)) bottom / 100% 51% no-repeat;
+  }
+
+  .ticket .main {
+    display: grid;
+    grid-template-columns: 15cqw minmax(0, 1fr);
+    align-items: center;
+    gap: 4cqw;
+    padding: 0 3cqw 0 5cqw;
+  }
+
+  .ticket .d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3.4cqw 0;
+    border-radius: 2cqw;
+    background: #252525;
+    line-height: 1;
+  }
+
+  .ticket .d b { font-size: 8cqw; letter-spacing: -.02em; }
+  .ticket .d small { margin-top: 1.2cqw; font-size: 2.4cqw; letter-spacing: .14em; color: #8d8d8d; }
+  .ticket h4 { margin-bottom: 1.4cqw; font-size: 4.6cqw; font-weight: 700; text-wrap: balance; }
+  .ticket p { font-size: 3cqw; color: #8d8d8d; }
+
+  .ticket .end {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.4cqw;
-    border-left: .22cqw dashed #3a3a3a;
-    margin: 2.2cqw 0;
+    gap: 2.6cqw;
+    margin: 3.6cqw 0;
+    border-left: .4cqw dashed #3a3a3a;
   }
 
-  .scene .end svg { width: 4.8cqw; height: auto; }
+  .ticket .end svg { width: 6.5cqw; height: auto; }
 
-  .scene .end span {
-    font-size: 1.15cqw;
-    font-weight: 700;
-    letter-spacing: .24em;
-    color: #6f6f6f;
+  .ticket .code {
+    width: 11cqw;
+    height: 8cqw;
+    opacity: .85;
+    background: repeating-linear-gradient(90deg,
+      #fff 0 .5cqw, transparent .5cqw 1cqw, #fff 1cqw 1.8cqw, transparent 1.8cqw 2.2cqw,
+      #fff 2.2cqw 2.5cqw, transparent 2.5cqw 3.4cqw, #fff 3.4cqw 4.4cqw, transparent 4.4cqw 4.9cqw);
   }
 
-  .scene .venues {
+  .scanline {
     position: absolute;
-    left: 6%;
-    right: 6%;
-    bottom: 6%;
-    overflow: hidden;
-    white-space: nowrap;
-    font-family: var(--mono);
-    font-size: 1.6cqw;
-    color: var(--muted);
-    -webkit-mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-            mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+    top: 0;
+    left: -3%;
+    right: -3%;
+    height: 1cqw;
+    border-radius: 1cqw;
+    background: #f5c443;
+    box-shadow: 0 0 3cqw 1cqw rgba(245, 196, 67, .55);
+    opacity: 0;
   }
 
-  .scene .venues span {
-    display: inline-block;
-    animation: marquee 40s linear infinite;
+  /* ---------- 03 Breakout ---------- */
+
+  .browser .strip {
+    display: flex;
+    align-items: flex-end;
+    height: 8.5cqw;
+    gap: 1.5cqw;
   }
 
-  @keyframes marquee {
-    to { transform: translateX(-50%); }
+  .browser .lights {
+    display: flex;
+    gap: 1.4cqw;
+    align-self: center;
+    margin: 0 3cqw 0 2cqw;
   }
 
-  /* ---------- 05 Bristol ---------- */
+  .browser .lights i { width: 2.3cqw; height: 2.3cqw; border-radius: 50%; background: #ff5f57; }
+  .browser .lights i:nth-child(2) { background: #febc2e; }
+  .browser .lights i:nth-child(3) { background: #28c840; }
 
-  .bristol .line { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  .bristol .thin { stroke-width: .8; }
-  .bristol .deck { stroke-width: 2.4; }
-  .bristol .river { stroke-dasharray: 10 6; animation: flow 6s linear infinite; }
-
-  @keyframes flow {
-    to { stroke-dashoffset: -64; }
-  }
-
-  .bristol .car {
-    fill: currentColor;
-    animation: cross 8s linear infinite;
-  }
-
-  .bristol .car.back {
-    animation-duration: 11s;
-    animation-direction: reverse;
-    animation-delay: -4s;
-  }
-
-  @keyframes cross {
-    from { transform: translateX(0); }
-    to   { transform: translateX(200px); }
-  }
-
-  .bristol .balloon {
-    transform-box: fill-box;
-    transform-origin: 50% 100%;
-    animation: float 7s ease-in-out infinite;
-  }
-
-  .bristol .balloon.small { animation-duration: 9s; animation-delay: -3s; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50%      { transform: translateY(-9px) rotate(2deg); }
-  }
-
-  .bristol .coords {
-    font-family: var(--mono);
-    font-size: 8.5px;
-    letter-spacing: .08em;
-    fill: var(--muted);
-  }
-
-  /* ---------- 06 Words ---------- */
-
-  .words {
+  .browser .tab {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 1.6cqw;
+    width: 34cqw;
+    height: 6.4cqw;
+    padding: 0 2.4cqw;
+    border-radius: 1.8cqw 1.8cqw 0 0;
+    background: #2a2a2a;
+    color: #e3e3e3;
+    font-size: 2.5cqw;
   }
 
-  .words p {
-    margin: 0;
-    font-size: 11.6cqw;
-    font-weight: 800;
-    line-height: .96;
-    letter-spacing: -.035em;
+  .browser .tab svg { width: 3.2cqw; height: 3.2cqw; flex: none; }
+  .browser .tab .x { margin-left: auto; color: #8f8f8f; }
+  .browser .newtab { align-self: center; color: #8f8f8f; font-size: 3.4cqw; }
+
+  .browser .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2.4cqw;
+    height: 7.6cqw;
+    padding: 0 2.4cqw;
+    background: #2a2a2a;
+    color: #9a9a9a;
+    font-size: 3cqw;
   }
 
-  .words span { display: block; }
-
-  .words .w1 { font-weight: 300; color: var(--fg-2); }
-
-  .words .w2 {
-    transform-origin: 0 85%;
-    animation: shrink 8s var(--ease) infinite;
+  .browser .omni {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 5cqw;
+    padding: 0 2.6cqw;
+    border-radius: 2.5cqw;
+    background: #1a1a1a;
+    color: #8a8a8a;
+    font-size: 2.4cqw;
   }
 
-  @keyframes shrink {
-    0%, 30%   { transform: scale(1); }
-    42%, 64%  { transform: scale(.34); }
-    76%, 100% { transform: scale(1); }
+  .browser .page-view {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0 0 2.2cqw 2.2cqw;
   }
 
-  .words .w3 {
-    width: max-content;
-    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 92% / 0 .14em;
-    animation: underline 8s var(--ease) infinite;
+  .browser .page-view text { font-family: var(--ui); }
+
+  /* ---------- paused: off-screen, or reduced motion ---------- */
+
+  .is-paused *,
+  .is-paused *::before,
+  .is-paused *::after {
+    animation-play-state: paused !important;
   }
 
-  @keyframes underline {
-    0%, 36%  { background-size: 0 .14em; background-position: 0 92%; }
-    50%, 84% { background-size: 100% .14em; background-position: 0 92%; }
-    84.01%   { background-position: 100% 92%; }
-    96%, 100% { background-size: 0 .14em; background-position: 100% 92%; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-play-state: paused !important;
+      transition: none !important;
+    }
   }
 
-  .words .w4 { display: flex; align-items: flex-end; gap: .08em; }
+  /* ---------- smaller screens ---------- */
 
-  .words .w4 svg {
-    width: .42em;
-    height: .42em;
-    margin-bottom: .12em;
-    fill: var(--accent);
-    animation: spin 14s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  /* ---------- 03 Breakout + 04 Mark ---------- */
-
-  .breakout text,
-  .mark text { font-family: var(--sans); }
-
-  .mark .txt {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: .06em;
-    fill: currentColor;
-  }
-
-  .mark .net { fill: none; stroke: var(--accent); stroke-width: 1; }
-  .mark .node { fill: var(--accent); }
-
-  /* ---------- responsive ---------- */
-
-  @media (max-width: 1180px) {
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-
-  @media (max-width: 860px) {
+  @media (max-width: 1099px) {
     .page { display: block; }
 
     .side {
       position: static;
       height: auto;
-      padding: 28px 20px 8px;
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      column-gap: 40px;
+      align-items: start;
     }
 
-    .logo {
-      flex-direction: row;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
+    .mark { grid-row: 1 / span 3; margin: 0; }
+    .side nav, .foot { grid-column: 2; }
+    .label { margin-top: 20px; }
+    .foot { padding-top: 16px; }
+
+    .products { grid-template-columns: minmax(0, 1fr); }
+
+    .product {
+      height: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      border-right: 0;
     }
 
-    .logo svg { width: 30px; }
+    .bar { grid-column: 1 / -1; }
+    .art { aspect-ratio: 1; }
 
-    .menu { display: flex; flex-wrap: wrap; column-gap: 20px; }
-    .menu button, .menu a { font-size: 15px; padding: 6px 0; }
-    .rule { margin: 10px 0; }
-    .projects, nav + .rule { display: none; }
-
-    .about { padding-top: 18px; max-width: 32em; }
-    .about p { display: inline; margin: 0 8px 0 0; }
-
-    .grid { padding: 28px 20px 64px; }
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border-top: 0;
+      border-left: 1px solid var(--line);
+      padding: 24px;
+    }
   }
 
-  @media (max-width: 560px) {
-    .grid { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 640px) {
+    .side { display: flex; align-items: stretch; }
+    .mark { max-width: 300px; margin-bottom: 20px; }
+
+    .product { display: flex; }
+    .art { aspect-ratio: 4 / 5; flex: none; }
+
+    .info {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+      padding: 18px 20px 22px;
+    }
   }
 </style>
 </head>
 <body>
 <div class="page">
+
   <aside class="side">
-    <a class="logo" href="/" aria-label="mostlywork.ing home">
-      <svg viewBox="0 0 482 502" fill="currentColor" aria-hidden="true"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg>
-      <span>mostlywork.ing</span>
-    </a>
+    <svg class="mark" viewBox="0 0 280 210" aria-hidden="true">
+      <polygon class="net" points=""/>
+      <g class="pieces" fill="currentColor">
+        <path d="M192.482 0H289.518L278.383 250.545H203.617Z"/>
+        <path d="M432.686 87.4918L482 162.257L260.089 279.178L222.706 221.116Z"/>
+        <path d="M482 338.036L432.686 412.802L222.706 279.178L260.089 221.116Z"/>
+        <path d="M192.482 501.089L203.617 250.545H278.383L289.518 501.089Z"/>
+        <path d="M0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393Z"/>
+        <path d="M0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178Z"/>
+      </g>
+      <g><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/></g>
+      <text class="txt" x="0" y="12"><tspan x="0">MOSTLY</tspan><tspan x="0" dy="11">WORK</tspan><tspan x="0" dy="11">.ING</tspan></text>
+      <text class="txt" x="280" y="12" text-anchor="end"><tspan x="280">BRISTOL</tspan><tspan x="280" dy="11">UK</tspan></text>
+      <text class="txt" x="0" y="183"><tspan x="0">TINY</tspan><tspan x="0" dy="11">SOFTWARE</tspan><tspan x="0" dy="11">CO.</tspan></text>
+      <text class="txt" x="280" y="183" text-anchor="end"><tspan x="280">SMALL</tspan><tspan x="280" dy="11">USEFUL</tspan><tspan x="280" dy="11">THINGS</tspan></text>
+    </svg>
 
-    <nav aria-label="Filter works">
-      <ul class="menu types">
-        <li><button type="button" data-filter="all" aria-pressed="true"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="3" cy="3" r="1.7"/><circle cx="9" cy="3" r="1.7"/><circle cx="3" cy="9" r="1.7"/><circle cx="9" cy="9" r="1.7"/></svg>All works <sup>6</sup></button></li>
-        <li><button type="button" data-filter="product" aria-pressed="false"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="3" cy="3" r="1.7"/><circle cx="9" cy="3" r="1.7"/><circle cx="3" cy="9" r="1.7"/><circle cx="9" cy="9" r="1.7"/></svg>Products <sup>3</sup></button></li>
-        <li><button type="button" data-filter="studio" aria-pressed="false"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="1.5" cy="1.5" r=".9"/><circle cx="6" cy="1.5" r=".9"/><circle cx="10.5" cy="1.5" r=".9"/><circle cx="1.5" cy="6" r=".9"/><circle cx="6" cy="6" r=".9"/><circle cx="10.5" cy="6" r=".9"/><circle cx="1.5" cy="10.5" r=".9"/><circle cx="6" cy="10.5" r=".9"/><circle cx="10.5" cy="10.5" r=".9"/></svg>Studio <sup>3</sup></button></li>
-      </ul>
+    <div>
+      <h1>mostlywork.ing</h1>
+      <p class="blurb">a tiny software company in bristol, uk. we make small, useful things.<span class="caret" aria-hidden="true"></span></p>
+    </div>
 
-      <hr class="rule">
-
-      <ul class="menu sectors">
-        <li><button type="button" data-filter="health" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>health</button></li>
-        <li><button type="button" data-filter="music" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>music</button></li>
-        <li><button type="button" data-filter="work" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>work</button></li>
-        <li><button type="button" data-filter="bristol" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>bristol</button></li>
+    <nav aria-label="Elsewhere">
+      <p class="label">── elsewhere</p>
+      <ul class="rows">
+        <li><a href="mailto:hello@mostlywork.ing"><span class="k">email</span><span class="v">hello@mostlywork.ing</span></a></li>
+        <li><span class="soon"><span class="k">instagram</span><span class="v">soon</span></span></li>
+        <li><span class="soon"><span class="k">terms</span><span class="v">soon</span></span></li>
+        <li><span class="soon"><span class="k">privacy</span><span class="v">soon</span></span></li>
       </ul>
     </nav>
 
-    <hr class="rule">
-
-    <ul class="menu projects">
-      <li><a href="https://usemacro.app" target="_blank" rel="noopener noreferrer" data-for="macro">Macro</a></li>
-      <li><a href="https://ourscene.uk" target="_blank" rel="noopener noreferrer" data-for="scene">Scene</a></li>
-      <li><a href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer" data-for="breakout">Breakout</a></li>
-    </ul>
-
-    <div class="about">
-      <p>We're a tiny software company in Bristol, UK. We make small, useful things.</p>
-      <p class="copy">&copy; 2026 mostlywork.ing</p>
+    <div class="foot">
+      <ul class="rows">
+        <li><span><span class="k">bristol, uk</span><time id="clock">--:--:--</time></span></li>
+      </ul>
+      <p>&copy; 2026 mostlywork.ing</p>
     </div>
   </aside>
 
-  <main class="grid" id="works">
+  <main class="products">
 
     <!-- 01 Macro -->
-    <a class="tile" id="macro" href="https://usemacro.app" target="_blank" rel="noopener noreferrer" data-tags="product health ios">
-      <div class="art macro" aria-hidden="true">
-        <div class="glow"></div>
-        <div class="phone">
-          <div class="screen">
-            <div class="fill"><i class="touch"></i></div>
-            <div class="status"><span>19:30</span><span class="island"></span><span class="bars"><i></i><i></i><i></i></span></div>
-            <div class="adding">Adding <b>Dinner</b> at <b>19:30</b></div>
-            <div class="read"><span class="label">Calories</span><span class="num"></span><span class="unit">Kcal</span></div>
-            <span class="cancel">Cancel</span>
+    <a class="product" href="https://usemacro.app" target="_blank" rel="noopener noreferrer">
+      <div class="bar"><span>01</span><span class="led beta">public beta</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="stage">
+          <div class="phone">
+            <div class="screen macro">
+              <div class="fill"><i class="touch"></i></div>
+              <div class="status"><span>19:30</span><span class="island"></span><span class="bars"><i></i><i></i><i></i></span></div>
+              <div class="adding">Adding <b>Dinner</b> at <b>19:30</b></div>
+              <div class="read"><span class="tag">Calories</span><span class="num"></span><span class="unit">Kcal</span></div>
+              <span class="cancel">Cancel</span>
+            </div>
           </div>
         </div>
-        <svg class="appicon" viewBox="0 0 180 180"><rect width="180" height="180" rx="40" fill="#111"/><g fill="#fff"><rect x="50" y="28" width="8" height="42" rx="4"/><rect x="64.5" y="28" width="8" height="42" rx="4"/><rect x="79" y="28" width="8" height="42" rx="4"/><path d="M50 60H87V66C87 76 82 82 76 84V147a7 7 0 0 1-14 0V84C56 82 50 76 50 66Z"/><path d="M121 28C112 33 102 50 102 72V96C102 98 104 100 108 101L110 102V147a7.5 7.5 0 0 0 15 0V33C125 29 123 27 121 28Z"/></g></svg>
       </div>
-      <div class="cap">
-        <h2>Macro <span>Simple calorie counter</span></h2>
-        <p>ios, health, beta</p>
+      <div class="info">
+        <h2>macro <span aria-hidden="true">↗</span></h2>
+        <p class="desc">simple calorie counter.</p>
+        <ul class="rows">
+          <li><span><span class="k">platform</span><span>iphone, ios 17+</span></span></li>
+          <li><span><span class="k">status</span><span>public beta</span></span></li>
+          <li><span><span class="k">price</span><span>free</span></span></li>
+        </ul>
+        <div class="go"><span>usemacro.app</span><span aria-hidden="true">→</span></div>
       </div>
     </a>
 
     <!-- 02 Scene -->
-    <a class="tile" id="scene" href="https://ourscene.uk" target="_blank" rel="noopener noreferrer" data-tags="product music ios">
-      <div class="art scene" aria-hidden="true">
-        <div class="stack">
-          <div class="stub">
-            <div class="ticket">
-              <div class="main">
-                <div class="date"><b>05</b><small>MAR</small></div>
-                <div><h3>Bodysnatcher &amp; Ingested</h3><p class="venue">The Fleece &middot; 19:00</p><p class="stars">★★★★★</p></div>
-              </div>
-              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
+    <a class="product" href="https://ourscene.uk" target="_blank" rel="noopener noreferrer">
+      <div class="bar"><span>02</span><span class="led beta">beta</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="stage">
+          <div class="phone">
+            <div class="screen scene">
+              <div class="status"><span>13:43</span><span class="island"></span><span class="bars"><i></i><i></i><i></i></span></div>
+              <span class="plus">+</span>
+              <h3>My Gigs</h3>
+              <ul class="gigs">
+                <li class="gig"><div class="clip"><div class="card"><div class="d"><b>23</b><small>MAY</small></div><div class="t"><b>Toothache + Support</b><small>The Croft · 19:00</small></div></div></div></li>
+                <li class="gig"><div class="clip"><div class="card"><div class="d"><b>6</b><small>JUN</small></div><div class="t"><b>FOE Fest 2026</b><small>Shredenhams · 15:00</small></div></div></div></li>
+                <li class="gig"><div class="clip"><div class="card"><div class="d"><b>10</b><small>SEP</small></div><div class="t"><b>Drug Church</b><small>Trinity · 19:00</small></div></div></div></li>
+                <li class="gig"><div class="clip"><div class="card"><div class="d"><b>10</b><small>MAR</small></div><div class="t"><b>Hot Mulligan</b><small>The Prospect Building</small></div></div></div></li>
+                <li class="gig"><div class="clip"><div class="card"><div class="d"><b>5</b><small>MAR</small></div><div class="t"><b>Bodysnatcher &amp; Ingested</b><small>The Fleece</small></div></div></div></li>
+              </ul>
+              <div class="tabs"><span class="on"><i>▦</i>Calendar</span><span><i>◎</i>Discover</span><span><i>●</i>Profile</span></div>
+              <span class="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span>
             </div>
           </div>
           <div class="stub">
             <div class="ticket">
               <div class="main">
-                <div class="date"><b>10</b><small>MAR</small></div>
-                <div><h3>Hot Mulligan</h3><p class="venue">The Prospect Building &middot; 19:30</p><p class="stars">★★★★★</p></div>
+                <div class="d"><b>5</b><small>MAR</small></div>
+                <div><h4>Bodysnatcher &amp; Ingested</h4><p>The Fleece</p></div>
               </div>
-              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
-            </div>
-          </div>
-          <div class="stub">
-            <div class="ticket">
-              <div class="main">
-                <div class="date"><b>23</b><small>MAY</small></div>
-                <div><h3>Toothache + Support</h3><p class="venue">The Croft &middot; 19:00</p><p class="via">via Headfirst</p></div>
+              <div class="end">
+                <svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg>
+                <i class="code"></i>
               </div>
-              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
             </div>
+            <i class="scanline"></i>
           </div>
         </div>
-        <div class="venues"><span>The Fleece · Trinity · Exchange · The Croft · SWX · Marble Factory · The Prospect Building · Thekla · Rough Trade Bristol · The Louisiana · The Fleece · Trinity · Exchange · The Croft · SWX · Marble Factory · The Prospect Building · Thekla · Rough Trade Bristol · The Louisiana · </span></div>
       </div>
-      <div class="cap">
-        <h2>Scene <span>Letterboxd for gigs</span></h2>
-        <p>ios, music, beta</p>
+      <div class="info">
+        <h2>scene <span aria-hidden="true">↗</span></h2>
+        <p class="desc">letterboxd for gigs.</p>
+        <ul class="rows">
+          <li><span><span class="k">platform</span><span>iphone</span></span></li>
+          <li><span><span class="k">status</span><span>beta</span></span></li>
+          <li><span><span class="k">price</span><span>free</span></span></li>
+        </ul>
+        <div class="go"><span>ourscene.uk</span><span aria-hidden="true">→</span></div>
       </div>
     </a>
 
     <!-- 03 Breakout -->
-    <a class="tile" id="breakout" href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer" data-tags="product work browser">
-      <div class="art breakout" aria-hidden="true">
-        <svg viewBox="0 0 400 300">
-          <defs>
-            <pattern id="bo-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r=".9" fill="#cdd2da"/></pattern>
-            <linearGradient id="bo-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FD5600"/><stop offset=".58" stop-color="#FF2709"/><stop offset="1" stop-color="#FF221E"/></linearGradient>
-            <path id="bo-cursor" d="M.47 9.35L31.79 89.67C32.9 92.57 35.69 94.49 38.8 94.5H39.2C42.29 94.37 44.93 92.24 45.72 89.26L53.47 53.48L89.06 45.76C92.13 45.02 94.34 42.34 94.49 39.19C94.65 35.95 92.71 32.96 89.68 31.8L9.36.48C6.83-.52 3.94.08 2.01 2C.08 3.93-.52 6.81.47 9.35Z"/>
-          </defs>
+    <a class="product" href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer">
+      <div class="bar"><span>03</span><span class="led">live</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="stage">
+          <div class="browser">
+            <div class="strip">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="tab">
+                <svg viewBox="0 0 211 211"><rect x="4" y="1" width="203" height="203" rx="49" fill="#ff2709"/><path transform="translate(59 57)" fill="#fff" d="M.47 9.35L31.79 89.67C32.9 92.57 35.69 94.49 38.8 94.5H39.2C42.29 94.37 44.93 92.24 45.72 89.26L53.47 53.48L89.06 45.76C92.13 45.02 94.34 42.34 94.49 39.19C94.65 35.95 92.71 32.96 89.68 31.8L9.36.48C6.83-.52 3.94.08 2.01 2C.08 3.93-.52 6.81.47 9.35Z"/></svg>
+                New Tab<span class="x">×</span>
+              </span>
+              <span class="newtab">+</span>
+            </div>
+            <div class="toolbar">
+              <span>←</span><span>→</span><span>↻</span>
+              <span class="omni">Search Google or type a URL</span>
+              <span>⋮</span>
+            </div>
+            <svg class="page-view" viewBox="0 0 312 194">
+              <defs>
+                <pattern id="bo-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r=".9" fill="#cdd2da"/></pattern>
+                <linearGradient id="bo-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FD5600"/><stop offset=".58" stop-color="#FF2709"/><stop offset="1" stop-color="#FF221E"/></linearGradient>
+                <path id="bo-cursor" d="M.47 9.35L31.79 89.67C32.9 92.57 35.69 94.49 38.8 94.5H39.2C42.29 94.37 44.93 92.24 45.72 89.26L53.47 53.48L89.06 45.76C92.13 45.02 94.34 42.34 94.49 39.19C94.65 35.95 92.71 32.96 89.68 31.8L9.36.48C6.83-.52 3.94.08 2.01 2C.08 3.93-.52 6.81.47 9.35Z"/>
+              </defs>
 
-          <!-- board -->
-          <rect x="50" y="38" width="300" height="212" rx="20" fill="#fde6e2"/>
-          <rect x="57" y="45" width="286" height="198" rx="14" fill="#f8f9fb"/>
-          <rect x="57" y="45" width="286" height="198" rx="14" fill="url(#bo-dots)"/>
+              <rect width="312" height="194" fill="#f7f8fa"/>
+              <rect width="312" height="194" fill="url(#bo-dots)"/>
 
-          <!-- chrome -->
-          <g stroke="#e6e8ed" fill="#fff">
-            <rect x="66" y="54" width="54" height="17" rx="4.5"/>
-            <rect x="158" y="54" width="84" height="19" rx="5"/>
-            <rect x="306" y="54" width="28" height="12" rx="6"/>
-            <rect x="148" y="222" width="104" height="14" rx="7"/>
-          </g>
-          <text x="72" y="65.5" font-size="6.5" font-weight="700" fill="#111">breakout</text>
-          <circle cx="104" cy="62.5" r="2.6" fill="#ffb4a6"/><circle cx="110" cy="62.5" r="2.6" fill="#9ab8ff"/>
-          <rect x="164" y="59" width="9" height="9" rx="2.2" fill="url(#bo-red)"/>
-          <rect x="178" y="59" width="9" height="9" rx="2.2" fill="#111"/>
-          <g fill="#eceef2"><rect x="192" y="59" width="9" height="9" rx="2.2"/><rect x="206" y="59" width="9" height="9" rx="2.2"/><rect x="220" y="59" width="9" height="9" rx="2.2"/></g>
-          <text x="320" y="62.3" font-size="5" font-weight="700" fill="#2f6bff" text-anchor="middle">sign in</text>
-          <rect x="154" y="225.5" width="7" height="7" rx="1.8" fill="#2f6bff"/>
-          <g fill="#c9ced6"><rect x="167" y="228" width="6" height="2" rx="1"/><rect x="178" y="228" width="6" height="2" rx="1"/><rect x="189" y="228" width="6" height="2" rx="1"/><rect x="200" y="228" width="6" height="2" rx="1"/><rect x="211" y="228" width="6" height="2" rx="1"/><rect x="222" y="228" width="6" height="2" rx="1"/><rect x="233" y="228" width="6" height="2" rx="1"/></g>
-
-          <!-- sticky note, placed by the green cursor -->
-          <g transform="translate(140 116)">
-            <g>
-              <animateTransform attributeName="transform" type="scale" dur="8s" repeatCount="indefinite" values="0;0;1.1;1;1;0;0" keyTimes="0;.2;.24;.27;.86;.9;1"/>
-              <g transform="rotate(-6)">
-                <rect x="-25" y="-23" width="50" height="46" rx="2" fill="#ffe27a"/>
-                <path d="M25 13V23H15Z" fill="#f2cd50"/>
-                <text x="-18" y="-7" font-size="8" font-weight="700" fill="#5d4a00">standup</text>
-                <text x="-18" y="5" font-size="7" fill="#7a6400">10:00 ☕</text>
+              <!-- new tab chrome: room, most visited, sign in, tools -->
+              <g stroke="#e6e8ed" fill="#fff">
+                <rect x="10" y="9" width="54" height="17" rx="4.5"/>
+                <rect x="114" y="9" width="84" height="19" rx="5"/>
+                <rect x="272" y="9" width="30" height="12" rx="6"/>
+                <rect x="104" y="174" width="104" height="14" rx="7"/>
               </g>
-            </g>
-          </g>
+              <text x="16" y="20.5" font-size="6.5" font-weight="700" fill="#111">breakout</text>
+              <circle cx="49" cy="17.5" r="2.6" fill="#ffb4a6"/><circle cx="55" cy="17.5" r="2.6" fill="#9ab8ff"/>
+              <rect x="120" y="14" width="9" height="9" rx="2.2" fill="url(#bo-red)"/>
+              <rect x="134" y="14" width="9" height="9" rx="2.2" fill="#111"/>
+              <g fill="#eceef2"><rect x="148" y="14" width="9" height="9" rx="2.2"/><rect x="162" y="14" width="9" height="9" rx="2.2"/><rect x="176" y="14" width="9" height="9" rx="2.2"/></g>
+              <text x="287" y="17.3" font-size="5" font-weight="700" fill="#2f6bff" text-anchor="middle">sign in</text>
+              <rect x="110" y="177.5" width="7" height="7" rx="1.8" fill="#2f6bff"/>
+              <g fill="#c9ced6"><rect x="123" y="180" width="6" height="2" rx="1"/><rect x="134" y="180" width="6" height="2" rx="1"/><rect x="145" y="180" width="6" height="2" rx="1"/><rect x="156" y="180" width="6" height="2" rx="1"/><rect x="167" y="180" width="6" height="2" rx="1"/><rect x="178" y="180" width="6" height="2" rx="1"/><rect x="189" y="180" width="6" height="2" rx="1"/></g>
 
-          <!-- the doodle, drawn by "you" -->
-          <path id="bo-doodle" d="M92 186C104 142 140 128 154 152S168 202 196 188S220 120 252 134S270 182 300 164" fill="none" stroke="#ff2709" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1.02" stroke-dashoffset="1">
-            <animate attributeName="stroke-dashoffset" dur="8s" repeatCount="indefinite" values="1;0;0;1" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1"/>
-          </path>
+              <!-- sticky note, placed by the green cursor -->
+              <g transform="translate(96 70)">
+                <g>
+                  <animateTransform attributeName="transform" type="scale" dur="8s" repeatCount="indefinite" values="0;0;1.1;1;1;0;0" keyTimes="0;.2;.24;.27;.86;.9;1"/>
+                  <g transform="rotate(-6)">
+                    <rect x="-25" y="-23" width="50" height="46" rx="2" fill="#ffe27a"/>
+                    <path d="M25 13V23H15Z" fill="#f2cd50"/>
+                    <text x="-18" y="-7" font-size="8" font-weight="700" fill="#5d4a00">standup</text>
+                    <text x="-18" y="5" font-size="7" fill="#7a6400">10:00 ☕</text>
+                  </g>
+                </g>
+              </g>
 
-          <!-- reactions -->
-          <text x="176" y="112" font-size="15" opacity="0">🎉
-            <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.46;.5;.56;.64;1"/>
-            <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -20;0 -20" keyTimes="0;.46;.64;1"/>
-          </text>
-          <text x="274" y="94" font-size="13" opacity="0">👋
-            <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.06;.1;.16;.24;1"/>
-            <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -16;0 -16" keyTimes="0;.06;.24;1"/>
-          </text>
+              <!-- the doodle, drawn by "you" -->
+              <path id="bo-doodle" d="M48 140C60 96 96 82 110 106S124 156 152 142S176 74 208 88S226 136 256 118" fill="none" stroke="#ff2709" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1.02" stroke-dashoffset="1">
+                <animate attributeName="stroke-dashoffset" dur="8s" repeatCount="indefinite" values="1;0;0;1" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1"/>
+              </path>
 
-          <!-- blue cursor, idling -->
-          <g>
-            <animateMotion dur="8s" repeatCount="indefinite" path="M298 104C318 128 294 150 270 134S262 86 298 104Z"/>
-            <use href="#bo-cursor" transform="scale(.16)" fill="#2f6bff" stroke="#fff" stroke-width="12" paint-order="stroke"/>
-            <rect x="12" y="13" width="18" height="10" rx="5" fill="#2f6bff"/>
-            <text x="21" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">jo</text>
-          </g>
+              <!-- reactions -->
+              <text x="132" y="66" font-size="15" opacity="0">🎉
+                <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.46;.5;.56;.64;1"/>
+                <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -20;0 -20" keyTimes="0;.46;.64;1"/>
+              </text>
+              <text x="230" y="48" font-size="13" opacity="0">👋
+                <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.06;.1;.16;.24;1"/>
+                <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -16;0 -16" keyTimes="0;.06;.24;1"/>
+              </text>
 
-          <!-- green cursor, brings the sticky -->
-          <g>
-            <animateMotion dur="8s" repeatCount="indefinite" values="84,214;158,136;158,136;232,198;84,214" keyTimes="0;.2;.58;.8;1" calcMode="spline" keySplines=".5 0 .2 1;0 0 1 1;.5 0 .2 1;.5 0 .2 1"/>
-            <use href="#bo-cursor" transform="scale(.16)" fill="#16a34a" stroke="#fff" stroke-width="12" paint-order="stroke"/>
-            <rect x="12" y="13" width="24" height="10" rx="5" fill="#16a34a"/>
-            <text x="24" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">sam</text>
-          </g>
+              <!-- blue cursor, idling -->
+              <g>
+                <animateMotion dur="8s" repeatCount="indefinite" path="M254 58C274 82 250 104 226 88S218 40 254 58Z"/>
+                <use href="#bo-cursor" transform="scale(.16)" fill="#2f6bff" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+                <rect x="12" y="13" width="18" height="10" rx="5" fill="#2f6bff"/>
+                <text x="21" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">jo</text>
+              </g>
 
-          <!-- red cursor, the Breakout mark -->
-          <g>
-            <animateMotion dur="8s" repeatCount="indefinite" keyPoints="0;1;1;0" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1">
-              <mpath href="#bo-doodle"/>
-            </animateMotion>
-            <use href="#bo-cursor" transform="scale(.17)" fill="url(#bo-red)" stroke="#fff" stroke-width="12" paint-order="stroke"/>
-            <rect x="13" y="14" width="22" height="10" rx="5" fill="#ff2709"/>
-            <text x="24" y="21.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">you</text>
-          </g>
-        </svg>
+              <!-- green cursor, brings the sticky -->
+              <g>
+                <animateMotion dur="8s" repeatCount="indefinite" values="40,168;114,90;114,90;188,152;40,168" keyTimes="0;.2;.58;.8;1" calcMode="spline" keySplines=".5 0 .2 1;0 0 1 1;.5 0 .2 1;.5 0 .2 1"/>
+                <use href="#bo-cursor" transform="scale(.16)" fill="#16a34a" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+                <rect x="12" y="13" width="24" height="10" rx="5" fill="#16a34a"/>
+                <text x="24" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">sam</text>
+              </g>
+
+              <!-- red cursor, the Breakout mark -->
+              <g>
+                <animateMotion dur="8s" repeatCount="indefinite" keyPoints="0;1;1;0" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1">
+                  <mpath href="#bo-doodle"/>
+                </animateMotion>
+                <use href="#bo-cursor" transform="scale(.17)" fill="url(#bo-red)" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+                <rect x="13" y="14" width="22" height="10" rx="5" fill="#ff2709"/>
+                <text x="24" y="21.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">you</text>
+              </g>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="cap">
-        <h2>Breakout <span>The remote breakout area</span></h2>
-        <p>browser, work, free</p>
+      <div class="info">
+        <h2>breakout <span aria-hidden="true">↗</span></h2>
+        <p class="desc">the remote breakout area.</p>
+        <ul class="rows">
+          <li><span><span class="k">platform</span><span>chrome</span></span></li>
+          <li><span><span class="k">status</span><span>live</span></span></li>
+          <li><span><span class="k">price</span><span>free</span></span></li>
+        </ul>
+        <div class="go"><span>letsbreakout.com</span><span aria-hidden="true">→</span></div>
       </div>
     </a>
-
-    <!-- 04 Mark -->
-    <article class="tile" data-tags="studio">
-      <div class="art mark" aria-hidden="true">
-        <svg viewBox="0 0 400 300">
-          <polygon class="net" points=""/>
-          <g class="pieces" fill="currentColor">
-            <path d="M192.482 0H289.518L278.383 250.545H203.617Z"/>
-            <path d="M432.686 87.4918L482 162.257L260.089 279.178L222.706 221.116Z"/>
-            <path d="M482 338.036L432.686 412.802L222.706 279.178L260.089 221.116Z"/>
-            <path d="M192.482 501.089L203.617 250.545H278.383L289.518 501.089Z"/>
-            <path d="M0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393Z"/>
-            <path d="M0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178Z"/>
-          </g>
-          <g class="nodes"><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/></g>
-          <text class="txt" x="44" y="56"><tspan x="44">MOSTLY</tspan><tspan x="44" dy="12">WORK</tspan><tspan x="44" dy="12">.ING</tspan></text>
-          <text class="txt" x="356" y="222" text-anchor="end"><tspan x="356">SMALL</tspan><tspan x="356" dy="12">USEFUL</tspan><tspan x="356" dy="12">THINGS</tspan></text>
-          <text class="txt" x="356" y="56" text-anchor="end"><tspan x="356">BRISTOL</tspan><tspan x="356" dy="12">UK</tspan></text>
-          <text class="txt" x="44" y="222"><tspan x="44">TINY</tspan><tspan x="44" dy="12">SOFTWARE</tspan><tspan x="44" dy="12">CO.</tspan></text>
-        </svg>
-      </div>
-      <div class="cap">
-        <h2>mostlywork.ing <span>Studio mark</span></h2>
-        <p>identity, studio</p>
-      </div>
-    </article>
-
-    <!-- 05 Bristol -->
-    <article class="tile" data-tags="studio bristol">
-      <div class="art bristol" aria-hidden="true">
-        <svg viewBox="0 0 400 300">
-          <defs>
-            <linearGradient id="br-a" x1="0" x2="1"><stop offset="0" stop-color="#ff5b2e"/><stop offset=".2" stop-color="#ff5b2e"/><stop offset=".2" stop-color="#ffc83d"/><stop offset=".4" stop-color="#ffc83d"/><stop offset=".4" stop-color="#ff5b2e"/><stop offset=".6" stop-color="#ff5b2e"/><stop offset=".6" stop-color="#ffc83d"/><stop offset=".8" stop-color="#ffc83d"/><stop offset=".8" stop-color="#ff5b2e"/></linearGradient>
-            <linearGradient id="br-b" x1="0" x2="1"><stop offset="0" stop-color="#2b4bff"/><stop offset=".25" stop-color="#2b4bff"/><stop offset=".25" stop-color="#9fb0ff"/><stop offset=".5" stop-color="#9fb0ff"/><stop offset=".5" stop-color="#2b4bff"/><stop offset=".75" stop-color="#2b4bff"/><stop offset=".75" stop-color="#9fb0ff"/></linearGradient>
-            <path id="br-envelope" d="M0-20C14-20 19-7 13 6C10 12 5 16 3.5 19H-3.5C-5 16-10 12-13 6C-19-7-14-20 0-20Z"/>
-          </defs>
-
-          <!-- balloons -->
-          <g transform="translate(300 66) scale(1.25)"><g class="balloon">
-            <use href="#br-envelope" fill="url(#br-a)"/>
-            <path class="line thin" d="M-3.5 19L-2.6 23.5M3.5 19L2.6 23.5"/>
-            <rect x="-3" y="23.5" width="6" height="4.5" rx="1" fill="currentColor"/>
-          </g></g>
-          <g transform="translate(92 92) scale(.72)"><g class="balloon small">
-            <use href="#br-envelope" fill="url(#br-b)"/>
-            <path class="line thin" d="M-3.5 19L-2.6 23.5M3.5 19L2.6 23.5"/>
-            <rect x="-3" y="23.5" width="6" height="4.5" rx="1" fill="currentColor"/>
-          </g></g>
-
-          <!-- gorge -->
-          <path class="line" d="M24 178H112C120 204 130 236 148 264"/>
-          <path class="line" d="M376 178H288C280 204 270 236 252 264"/>
-          <path class="line thin" d="M104 190l-10 10M110 208l-14 14M117 228l-12 12M126 245l-8 8M296 190l10 10M290 208l14 14M283 228l12 12M274 245l8 8"/>
-          <path class="line thin river" d="M146 268C170 263 230 273 254 268"/>
-          <path class="line thin river" d="M162 276C186 272 214 280 238 276" style="animation-duration:9s"/>
-
-          <!-- bridge -->
-          <path class="line" d="M125 118Q200 226 275 118"/>
-          <path class="line thin" d="M125 122Q200 230 275 122"/>
-          <path class="line thin" d="M125 118Q96 152 58 178M275 118Q304 152 342 178"/>
-          <path class="line thin" d="M135 133.9V178M145 145.5V178M155 155.1V178M165 162.7V178M175 168.5V178M235 168.5V178M245 155.1V178M255 145.5V178M265 133.9V178"/>
-          <path class="line" d="M115 178L117.5 114H132.5L135 178M120.5 178V152a4.5 4.5 0 0 1 9 0V178M114 114H136"/>
-          <path class="line" d="M265 178L267.5 114H282.5L285 178M270.5 178V152a4.5 4.5 0 0 1 9 0V178M264 114H286"/>
-          <path class="line deck" d="M92 178H308"/>
-          <rect class="car" x="96" y="173.4" width="8" height="3.4" rx="1.4"/>
-          <rect class="car back" x="96" y="173.4" width="6" height="3.4" rx="1.4"/>
-
-          <text class="coords" x="200" y="296" text-anchor="middle">51°27′18″N  2°37′39″W</text>
-        </svg>
-      </div>
-      <div class="cap">
-        <h2>Bristol, UK <span>Where we work</span></h2>
-        <p>bristol, home</p>
-      </div>
-    </article>
-
-    <!-- 06 Words -->
-    <article class="tile" data-tags="studio">
-      <div class="art words" aria-hidden="true">
-        <p>
-          <span class="w1">we make</span>
-          <span class="w2">small,</span>
-          <span class="w3">useful</span>
-          <span class="w4">things<svg viewBox="0 0 482 502"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg></span>
-        </p>
-      </div>
-      <div class="cap">
-        <h2>Small, useful things <span>What we make</span></h2>
-        <p>studio, words</p>
-      </div>
-    </article>
 
   </main>
 </div>
 
 <script>
 (() => {
-  const grid = document.getElementById('works');
-  const tiles = [...grid.querySelectorAll('.tile')];
-  const buttons = [...document.querySelectorAll('[data-filter]')];
   const still = matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ---------- filters ---------- */
+  /* ---------- bristol clock ---------- */
 
-  tiles.forEach((t, i) => { t.style.viewTransitionName = 'tile-' + i; });
+  const clock = document.getElementById('clock');
+  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  const tickClock = () => { clock.textContent = fmt.format(new Date()); };
+  tickClock();
+  setInterval(tickClock, 1000);
 
-  function apply(filter) {
-    tiles.forEach(t => {
-      t.hidden = filter !== 'all' && !t.dataset.tags.split(' ').includes(filter);
-    });
-    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+  /* ---------- one clock for the scripted animations; each runs only while on screen ---------- */
+
+  const actors = [];
+  function actor(el, ms, tick) {
+    const a = { el, ms, tick, visible: false };
+    tick(ms);
+    actors.push(a);
+    return a;
   }
 
-  function select(filter, push) {
-    if (!buttons.some(b => b.dataset.filter === filter)) filter = 'all';
-    if (push) history.replaceState(null, '', filter === 'all' ? location.pathname : '#' + filter);
-    if (document.startViewTransition && !still.matches) document.startViewTransition(() => apply(filter));
-    else apply(filter);
-  }
-
-  buttons.forEach(b => b.addEventListener('click', () => {
-    const on = b.getAttribute('aria-pressed') === 'true';
-    select(on ? 'all' : b.dataset.filter, true);
-  }));
-
-  apply(buttons.some(b => b.dataset.filter === location.hash.slice(1)) ? location.hash.slice(1) : 'all');
-  addEventListener('hashchange', () => select(location.hash.slice(1), false));
-
-  /* ---------- sidebar hover highlights its tile ---------- */
-
-  document.querySelectorAll('[data-for]').forEach(a => {
-    const tile = document.getElementById(a.dataset.for);
-    a.addEventListener('mouseenter', () => { grid.classList.add('dim'); tile.classList.add('hl'); });
-    a.addEventListener('mouseleave', () => { grid.classList.remove('dim'); tile.classList.remove('hl'); });
-  });
-
-  /* ---------- pause art that is off-screen ---------- */
-
-  const smil = document.querySelector('.breakout svg');
-
-  function syncSmil(visible) {
-    if (still.matches) { smil.setCurrentTime(4.2); smil.pauseAnimations(); }
-    else if (visible) smil.unpauseAnimations();
-    else smil.pauseAnimations();
-  }
-
-  const visible = new Set();
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      e.target.classList.toggle('is-paused', !e.isIntersecting);
-      e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
-      if (e.target.contains(smil)) syncSmil(e.isIntersecting);
-    });
-  });
-  tiles.forEach(t => io.observe(t));
-  still.addEventListener('change', () => syncSmil(visible.has(smil.closest('.tile'))));
-
-  /* ---------- the studio mark: bars breathe, the net follows, words scramble ---------- */
-
-  const mark = document.querySelector('.mark svg');
-  const markTile = mark.closest('.tile');
-  const pieces = [...mark.querySelectorAll('.pieces path')];
-  const nodes = [...mark.querySelectorAll('.node')];
-  const net = mark.querySelector('.net');
-  const group = mark.querySelector('.pieces');
-
-  const C = [241, 250.5];
-  const tips = [[241, 0], [457.3, 124.9], [457.3, 375.4], [241, 501.1], [24.7, 377], [24.7, 124.9]];
-  const dirs = tips.map(([x, y]) => { const dx = x - C[0], dy = y - C[1], l = Math.hypot(dx, dy); return [dx / l, dy / l]; });
-  const sizes = [[10, 10], [6, 6], [14, 8], [7, 7], [12, 12], [5, 5]];
-  const S = .2, T = 7000;
-
-  const bump = x => { x = ((x % 1) + 1) % 1; return x < .4 ? Math.sin(Math.PI * x / .4) ** 2 : 0; };
-
-  function drawMark(ms) {
-    const p = ms / T;
-    const rot = 5 * Math.sin(2 * Math.PI * p) * Math.PI / 180;
-    const cos = Math.cos(rot), sin = Math.sin(rot);
-    group.setAttribute('transform', `translate(200 150) rotate(${rot * 180 / Math.PI}) scale(${S}) translate(${-C[0]} ${-C[1]})`);
-    const pts = [];
-    pieces.forEach((el, i) => {
-      const d = 48 * bump(p - i / 6);
-      el.setAttribute('transform', `translate(${dirs[i][0] * d} ${dirs[i][1] * d})`);
-      const out = 70 + 60 * bump(p * 2 - i / 3 + .2) + d;
-      const lx = (tips[i][0] - C[0] + dirs[i][0] * out) * S;
-      const ly = (tips[i][1] - C[1] + dirs[i][1] * out) * S;
-      const x = 200 + lx * cos - ly * sin, y = 150 + lx * sin + ly * cos;
-      const [w, h] = sizes[i];
-      nodes[i].setAttribute('x', x - w / 2); nodes[i].setAttribute('y', y - h / 2);
-      nodes[i].setAttribute('width', w); nodes[i].setAttribute('height', h);
-      pts.push(x.toFixed(1) + ',' + y.toFixed(1));
-    });
-    net.setAttribute('points', pts.join(' '));
-  }
-
-  const spans = [...mark.querySelectorAll('tspan')].map(el => ({ el, text: el.textContent }));
-  const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.*#/';
-  let nextScramble = 2600, scrambleEnd = 0, lastScrambleFrame = 0;
-
-  function scramble(ms) {
-    if (ms > nextScramble && !scrambleEnd) { scrambleEnd = ms + 700; }
-    if (scrambleEnd) {
-      if (ms - lastScrambleFrame < 60) return;
-      lastScrambleFrame = ms;
-      const k = 1 - (scrambleEnd - ms) / 700;
-      spans.forEach(({ el, text }) => {
-        el.textContent = [...text].map((c, i) => i / text.length < k ? c : glyphs[Math.random() * glyphs.length | 0]).join('');
-      });
-      if (ms >= scrambleEnd) {
-        spans.forEach(({ el, text }) => { el.textContent = text; });
-        scrambleEnd = 0;
-        nextScramble = ms + 3200;
-      }
-    }
-  }
-
-  let start = performance.now() - T * .12, paused = 0;
+  let last = performance.now();
   function frame(now) {
-    if (still.matches || !visible.has(markTile)) { paused = paused || now; }
-    else {
-      if (paused) { start += now - paused; paused = 0; }
-      const ms = now - start;
-      drawMark(ms);
-      scramble(ms);
-    }
+    const dt = Math.min(now - last, 100);
+    last = now;
+    if (!still.matches) actors.forEach(a => { if (a.visible) { a.ms += dt; a.tick(a.ms); } });
     requestAnimationFrame(frame);
   }
-  drawMark(T * .12);
+
+  /* ---------- the mark: bars breathe, the net follows, labels scramble ---------- */
+
+  function mark(svg) {
+    const [W, H] = svg.getAttribute('viewBox').split(' ').slice(2).map(Number);
+    const cx = W / 2, cy = H / 2, S = .19, T = 7000;
+    const group = svg.querySelector('.pieces');
+    const pieces = [...group.children];
+    const nodes = [...svg.querySelectorAll('.node')];
+    const net = svg.querySelector('.net');
+    const C = [241, 250.5];
+    const tips = [[241, 0], [457.3, 124.9], [457.3, 375.4], [241, 501.1], [24.7, 377], [24.7, 124.9]];
+    const dirs = tips.map(([x, y]) => { const dx = x - C[0], dy = y - C[1], l = Math.hypot(dx, dy); return [dx / l, dy / l]; });
+    const sizes = [[9, 9], [5, 5], [12, 7], [6, 6], [10, 10], [5, 5]];
+    const bump = x => { x = ((x % 1) + 1) % 1; return x < .4 ? Math.sin(Math.PI * x / .4) ** 2 : 0; };
+
+    const spans = [...svg.querySelectorAll('tspan')].map(el => ({ el, text: el.textContent }));
+    const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.*#/';
+    let next = 2600, end = 0, lastSwap = 0;
+
+    return ms => {
+      const p = ms / T;
+      const deg = 5 * Math.sin(2 * Math.PI * p), rad = deg * Math.PI / 180;
+      const cos = Math.cos(rad), sin = Math.sin(rad);
+      group.setAttribute('transform', `translate(${cx} ${cy}) rotate(${deg}) scale(${S}) translate(${-C[0]} ${-C[1]})`);
+      const pts = pieces.map((el, i) => {
+        const d = 48 * bump(p - i / 6);
+        el.setAttribute('transform', `translate(${dirs[i][0] * d} ${dirs[i][1] * d})`);
+        const out = 70 + 60 * bump(p * 2 - i / 3 + .2) + d;
+        const lx = (tips[i][0] - C[0] + dirs[i][0] * out) * S;
+        const ly = (tips[i][1] - C[1] + dirs[i][1] * out) * S;
+        const x = cx + lx * cos - ly * sin, y = cy + lx * sin + ly * cos;
+        const [w, h] = sizes[i];
+        nodes[i].setAttribute('x', x - w / 2); nodes[i].setAttribute('y', y - h / 2);
+        nodes[i].setAttribute('width', w); nodes[i].setAttribute('height', h);
+        return x.toFixed(1) + ',' + y.toFixed(1);
+      });
+      net.setAttribute('points', pts.join(' '));
+
+      if (ms > next && !end) end = ms + 700;
+      if (end && ms - lastSwap > 60) {
+        lastSwap = ms;
+        const k = 1 - (end - ms) / 700;
+        spans.forEach(({ el, text }) => {
+          el.textContent = ms >= end ? text : [...text].map((c, i) => i / text.length < k ? c : glyphs[Math.random() * glyphs.length | 0]).join('');
+        });
+        if (ms >= end) { end = 0; next = ms + 3200; }
+      }
+    };
+  }
+
+  /* ---------- scene: a ticket is scanned and drops into My Gigs ---------- */
+
+  function scene(stage) {
+    const stub = stage.querySelector('.stub');
+    const scan = stage.querySelector('.scanline');
+    const list = stage.querySelector('.gigs');
+    const CYCLE = 4400;
+    // stage units (cqw): where the stub starts, rests while scanned, and lands in the list
+    const START = [-70, 116, -16, 1], REST = [1, 104, -7, 1], END = [23, 44, 0, 1];
+    const lerp = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+    const outCubic = t => 1 - (1 - t) ** 3;
+    const inOut = t => t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
+    let cycle = -1, dropped = false;
+
+    function load() {
+      const row = list.lastElementChild;
+      stub.querySelector('.d b').textContent = row.querySelector('.d b').textContent;
+      stub.querySelector('.d small').textContent = row.querySelector('.d small').textContent;
+      stub.querySelector('h4').textContent = row.querySelector('.t b').textContent;
+      stub.querySelector('p').textContent = row.querySelector('.t small').textContent;
+    }
+
+    function drop() {
+      const old = list.lastElementChild;
+      const row = old.cloneNode(true);
+      row.classList.add('new');
+      list.prepend(row);
+      old.remove();
+      row.offsetHeight;
+      row.classList.remove('new');
+    }
+
+    return ms => {
+      const c = Math.floor(ms / CYCLE), p = (ms % CYCLE) / CYCLE;
+      if (c !== cycle) { cycle = c; dropped = false; load(); }
+      let pose = START, alpha = 1, line = -1;
+      if (p < .22) pose = lerp(START, REST, outCubic(p / .22));
+      else if (p < .5) { pose = REST; line = Math.min(1, Math.max(0, (p - .25) / .2)); }
+      else if (p < .66) {
+        const t = inOut((p - .5) / .16);
+        pose = lerp(REST, END, t);
+        alpha = t < .6 ? 1 : 1 - (t - .6) / .4;
+      } else alpha = 0;
+      if (!dropped && p >= .6) { dropped = true; drop(); }
+      stub.style.transform = `translate(${pose[0]}cqw, ${pose[1]}cqw) rotate(${pose[2]}deg) scale(${pose[3]})`;
+      stub.style.opacity = alpha;
+      scan.style.opacity = line >= 0 && line < 1 ? 1 : 0;
+      scan.style.transform = `translateY(${Math.max(line, 0) * 42}cqw)`;
+    };
+  }
+
+  const markSvg = document.querySelector('.mark');
+  const sceneStage = document.querySelector('.scene').closest('.stage');
+  actor(markSvg, 7000 * .12, mark(markSvg));
+  actor(sceneStage, 4400 * .4, scene(sceneStage));
+
+  /* ---------- pause whatever is off screen ---------- */
+
+  const smil = document.querySelector('.page-view');
+  const syncSmil = on => {
+    if (still.matches) { smil.setCurrentTime(4.2); smil.pauseAnimations(); }
+    else if (on) smil.unpauseAnimations();
+    else smil.pauseAnimations();
+  };
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    const on = e.isIntersecting;
+    e.target.classList.toggle('is-paused', !on);
+    actors.forEach(a => { if (e.target.contains(a.el)) a.visible = on; });
+    if (e.target.contains(smil)) syncSmil(on);
+  }));
+  document.querySelectorAll('.product, .mark').forEach(el => io.observe(el));
+  still.addEventListener('change', () => syncSmil(!smil.closest('.product').classList.contains('is-paused')));
+
   requestAnimationFrame(frame);
 })();
 </script>
