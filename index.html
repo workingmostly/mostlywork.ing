@@ -7,61 +7,1191 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
 <link rel="icon" href="favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@200..800&display=swap" rel="stylesheet">
 <title>mostlywork.ing</title>
 <style>
   :root {
     color-scheme: light dark;
-    --fg: #111;
     --bg: #fff;
+    --fg: #111;
+    --fg-2: #555;
+    --muted: #8a8a8a;
+    --line: #e6e6e6;
+    --accent: #2b4bff;
+    --sans: "Karla", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+    --side: 248px;
+    --ease: cubic-bezier(.65, 0, .25, 1);
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --fg: #eee;
       --bg: #111;
+      --fg: #eee;
+      --fg-2: #aaa;
+      --muted: #8a8a8a;
+      --line: #262626;
+      --accent: #7088ff;
     }
   }
+
+  * { box-sizing: border-box; }
 
   html, body {
     margin: 0;
     padding: 0;
     background: var(--bg);
-  }
-
-  pre {
     color: var(--fg);
-    font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0;
-    padding: 8px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
   }
 
-  .mark {
-    display: block;
-    width: auto;
-    height: 20px;
+  body {
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
   }
 
-  a {
+  a { color: inherit; text-decoration: none; }
+
+  button {
+    font: inherit;
     color: inherit;
-    text-decoration: underline;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ---------- layout ---------- */
+
+  .page {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  .side {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 44px 24px 36px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 14px;
+    align-self: flex-start;
+    margin-bottom: 52px;
+  }
+
+  .logo svg {
+    width: 44px;
+    height: auto;
+    animation: tick 18s var(--ease) infinite;
+  }
+
+  .logo:hover svg { animation-duration: 3s; }
+
+  .logo span {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -.01em;
+  }
+
+  @keyframes tick {
+    0%, 13%      { transform: rotate(0deg); }
+    16.66%, 29.66% { transform: rotate(60deg); }
+    33.33%, 46.33% { transform: rotate(120deg); }
+    50%, 63%     { transform: rotate(180deg); }
+    66.66%, 79.66% { transform: rotate(240deg); }
+    83.33%, 96.33% { transform: rotate(300deg); }
+    100%         { transform: rotate(360deg); }
+  }
+
+  .menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu li { margin: 0; }
+
+  .menu button,
+  .menu a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 8px 0;
+    letter-spacing: -.005em;
+    transition: opacity .2s;
+  }
+
+  .types button { opacity: .38; }
+  .types button:hover,
+  .types button[aria-pressed="true"] { opacity: 1; }
+
+  .types sup {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: -4px;
+    align-self: flex-start;
+  }
+
+  .ico {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    fill: currentColor;
+    transition: transform .5s var(--ease);
+  }
+
+  .types [aria-pressed="true"] .ico { transform: rotate(45deg); }
+
+  .rule {
+    height: 1px;
+    background: var(--line);
+    border: 0;
+    margin: 18px 0;
+  }
+
+  .sectors button { gap: 6px; opacity: .38; }
+  .sectors button:hover,
+  .sectors button[aria-pressed="true"] { opacity: 1; }
+
+  .chev {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    transition: transform .35s var(--ease);
+  }
+
+  .sectors [aria-pressed="true"] .chev { transform: rotate(90deg); }
+
+  .projects a { gap: 8px; }
+
+  .projects a::after {
+    content: "\2197";
+    font-weight: 400;
+    font-size: 14px;
+    opacity: 0;
+    transform: translate(-4px, 2px);
+    transition: opacity .2s, transform .3s var(--ease);
+  }
+
+  .projects a:hover::after,
+  .projects a:focus-visible::after { opacity: 1; transform: none; }
+
+  .about {
+    margin-top: auto;
+    padding-top: 40px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--fg-2);
+    max-width: 180px;
+  }
+
+  .about p { margin: 0 0 12px; }
+
+  .copy {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ---------- grid ---------- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(20px, 3vw, 56px);
+    row-gap: clamp(36px, 4.5vw, 80px);
+    padding: 40px clamp(20px, 3.5vw, 64px) 96px clamp(8px, 1.5vw, 24px);
+    align-content: start;
+    overflow-x: clip;
+  }
+
+  .tile {
+    display: block;
+    min-width: 0;
+    transition: opacity .35s;
+  }
+
+  .tile[hidden] { display: none; }
+
+  .grid.dim .tile:not(.hl) { opacity: .18; }
+
+  .art {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    container-type: inline-size;
+    transition: transform .6s var(--ease);
+  }
+
+  a.tile:hover .art { transform: translateY(-6px); }
+
+  .art svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .cap { padding-top: 14px; }
+
+  .cap h2 {
+    margin: 0;
+    font-size: clamp(16px, 1.25vw, 19px);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -.005em;
+  }
+
+  .cap h2 span { font-weight: 400; color: var(--fg-2); }
+
+  a.tile .cap h2::after {
+    content: " \2197";
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+
+  a.tile:hover .cap h2::after,
+  a.tile:focus-visible .cap h2::after { opacity: 1; }
+
+  .cap p {
+    margin: 4px 0 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .02em;
+    color: var(--muted);
+  }
+
+  /* paused: off-screen tiles and reduced motion */
+  .is-paused .art,
+  .is-paused .art *,
+  .is-paused .art *::before,
+  .is-paused .art *::after {
+    animation-play-state: paused !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art, .art *, .art *::before, .art *::after, .logo svg {
+      animation-play-state: paused !important;
+    }
+    .art, .tile { transition: none; }
+  }
+
+  /* ---------- 01 Macro ---------- */
+
+  @property --lvl {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: .47;
+  }
+
+  @property --kcal {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 520;
+  }
+
+  .macro {
+    --cool: #d6f4df;
+    --hot: #ffd9d2;
+    --cool-ink: #1c9e4f;
+    --hot-ink: #e5484d;
+    --mix: calc(var(--lvl) * 100%);
+    animation: drag 9s ease-in-out infinite;
+  }
+
+  @keyframes drag {
+    0%   { --lvl: .47; --kcal: 520; }
+    12%  { --lvl: .41; --kcal: 450; }
+    30%  { --lvl: .80; --kcal: 880; }
+    40%  { --lvl: .74; --kcal: 810; }
+    58%  { --lvl: .22; --kcal: 240; }
+    70%  { --lvl: .28; --kcal: 310; }
+    86%  { --lvl: .55; --kcal: 600; }
+    100% { --lvl: .47; --kcal: 520; }
+  }
+
+  .macro .glow {
+    position: absolute;
+    inset: 4% 18%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink)) 0%, transparent 100%);
+    opacity: .28;
+    filter: blur(4cqw);
+  }
+
+  .macro .phone {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 30cqw;
+    height: 60cqw;
+    translate: -50% -50%;
+    border-radius: 5cqw;
+    background: #111;
+    padding: 1cqw;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 3cqw 6cqw -2cqw rgba(0,0,0,.35);
+  }
+
+  .macro .screen {
+    position: relative;
+    height: 100%;
+    border-radius: 4cqw;
+    overflow: hidden;
+    background: #fff;
+    color: #111;
+    font-family: var(--sans);
+  }
+
+  .macro .fill {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklab, var(--hot) var(--mix), var(--cool));
+    border-top: .25cqw solid color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink));
+    transform: translateY(calc((1 - var(--lvl)) * 100%));
+  }
+
+  .macro .touch {
+    position: absolute;
+    top: -2.4cqw;
+    left: 60%;
+    width: 4.6cqw;
+    height: 4.6cqw;
+    border-radius: 50%;
+    background: rgba(0,0,0,.14);
+    box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.7);
+  }
+
+  .macro .status {
+    position: absolute;
+    top: 1.6cqw;
+    left: 2.6cqw;
+    right: 2.6cqw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5cqw;
+    font-weight: 700;
+  }
+
+  .macro .island {
+    width: 8cqw;
+    height: 2.2cqw;
+    border-radius: 2cqw;
+    background: #111;
+  }
+
+  .macro .bars { display: flex; gap: .35cqw; }
+  .macro .bars i { width: .6cqw; height: 1cqw; background: #111; border-radius: .2cqw; }
+
+  .macro .adding {
+    position: absolute;
+    top: 5.4cqw;
+    left: 2.6cqw;
+    font-size: 1.3cqw;
+    color: #999;
+  }
+
+  .macro .adding b { color: #111; font-weight: 700; }
+
+  .macro .read {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 46%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .macro .label {
+    font-size: 1.15cqw;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--hot-ink) var(--mix), var(--cool-ink));
+  }
+
+  .macro .num {
+    counter-reset: k var(--kcal);
+    font-size: 10.5cqw;
+    font-weight: 200;
+    letter-spacing: -.03em;
+    margin: .6cqw 0 .4cqw;
+  }
+
+  .macro .num::after { content: counter(k); }
+
+  .macro .unit { font-size: 1.4cqw; color: #8a8a8a; }
+
+  .macro .cancel {
+    position: absolute;
+    bottom: 3cqw;
+    left: 50%;
+    translate: -50% 0;
+    font-size: 1.3cqw;
+    font-weight: 600;
+    padding: .9cqw 2cqw;
+    border-radius: 2cqw;
+    background: rgba(255,255,255,.75);
+    box-shadow: 0 0 0 .15cqw rgba(0,0,0,.08);
+  }
+
+  .macro .appicon {
+    position: absolute;
+    left: 19cqw;
+    top: 13cqw;
+    width: 11cqw;
+    height: 11cqw;
+    rotate: -9deg;
+    animation: bob 6s ease-in-out infinite;
+    filter: drop-shadow(0 1.2cqw 1.2cqw rgba(0,0,0,.18));
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .macro .appicon rect:first-child { stroke: rgba(255,255,255,.16); stroke-width: 4; }
+    .scene .ticket { background: #1b1b1b; }
+    .scene .date { background: #282828; }
+  }
+
+  @keyframes bob {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -2cqw; }
+  }
+
+  /* ---------- 02 Scene ---------- */
+
+  .scene .stack {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 64cqw;
+    height: 25cqw;
+    translate: -50% -50%;
+  }
+
+  .scene .stub {
+    position: absolute;
+    inset: 0;
+    filter: drop-shadow(0 1.4cqw 1.6cqw rgba(0,0,0,.22));
+    animation: shuffle 10.5s cubic-bezier(.6, 0, .3, 1) infinite;
+    will-change: transform;
+  }
+
+  .scene .stub:nth-child(2) { animation-delay: -3.5s; }
+  .scene .stub:nth-child(3) { animation-delay: -7s; }
+
+  @keyframes shuffle {
+    0%, 22%      { transform: translate(0, 0) rotate(-3deg); z-index: 3; }
+    22.01%       { z-index: 4; }
+    28%          { transform: translate(12cqw, -18cqw) rotate(8deg); z-index: 4; }
+    28.01%       { z-index: 1; }
+    33.3%, 55.3% { transform: translate(5cqw, -8cqw) rotate(7deg) scale(.9); z-index: 1; }
+    55.4%        { z-index: 2; }
+    66.6%, 88.7% { transform: translate(2.5cqw, -4cqw) rotate(2deg) scale(.95); z-index: 2; }
+    88.8%        { z-index: 3; }
+    100%         { transform: translate(0, 0) rotate(-3deg); z-index: 3; }
+  }
+
+  .scene .ticket {
+    --nx: calc(100% - 12.5cqw);
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12.5cqw;
+    border-radius: 1.6cqw;
+    background: #151515;
+    color: #fff;
+    font-family: var(--sans);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+    -webkit-mask:
+      radial-gradient(circle at var(--nx) 0, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at var(--nx) 100%, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) bottom / 100% 51% no-repeat;
+            mask:
+      radial-gradient(circle at var(--nx) 0, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at var(--nx) 100%, #0000 1.4cqw, #000 calc(1.4cqw + .5px)) bottom / 100% 51% no-repeat;
+  }
+
+  .scene .main {
+    display: grid;
+    grid-template-columns: 9.5cqw minmax(0, 1fr);
+    align-items: center;
+    column-gap: 2.6cqw;
+    padding: 0 2.4cqw 0 3.4cqw;
+  }
+
+  .scene .date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    padding: 1.9cqw 0;
+    border-radius: 1.1cqw;
+    background: #222;
+  }
+
+  .scene .date b { font-size: 5.2cqw; font-weight: 700; letter-spacing: -.02em; }
+  .scene .date small { font-size: 1.35cqw; letter-spacing: .16em; color: #8d8d8d; margin-top: .6cqw; }
+
+  .scene h3 {
+    margin: 0 0 .8cqw;
+    font-size: 2.8cqw;
+    font-weight: 700;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  .scene .venue { margin: 0; font-size: 1.75cqw; color: #8d8d8d; }
+  .scene .stars { margin: 1.2cqw 0 0; font-size: 2cqw; color: #f5c443; letter-spacing: .12em; }
+  .scene .via { margin: 1.2cqw 0 0; font-size: 1.6cqw; color: #6f6f6f; }
+
+  .scene .end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4cqw;
+    border-left: .22cqw dashed #3a3a3a;
+    margin: 2.2cqw 0;
+  }
+
+  .scene .end svg { width: 4.8cqw; height: auto; }
+
+  .scene .end span {
+    font-size: 1.15cqw;
+    font-weight: 700;
+    letter-spacing: .24em;
+    color: #6f6f6f;
+  }
+
+  .scene .venues {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 6%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 1.6cqw;
+    color: var(--muted);
+    -webkit-mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+            mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  }
+
+  .scene .venues span {
+    display: inline-block;
+    animation: marquee 40s linear infinite;
+  }
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- 05 Bristol ---------- */
+
+  .bristol .line { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .bristol .thin { stroke-width: .8; }
+  .bristol .deck { stroke-width: 2.4; }
+  .bristol .river { stroke-dasharray: 10 6; animation: flow 6s linear infinite; }
+
+  @keyframes flow {
+    to { stroke-dashoffset: -64; }
+  }
+
+  .bristol .car {
+    fill: currentColor;
+    animation: cross 8s linear infinite;
+  }
+
+  .bristol .car.back {
+    animation-duration: 11s;
+    animation-direction: reverse;
+    animation-delay: -4s;
+  }
+
+  @keyframes cross {
+    from { transform: translateX(0); }
+    to   { transform: translateX(200px); }
+  }
+
+  .bristol .balloon {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: float 7s ease-in-out infinite;
+  }
+
+  .bristol .balloon.small { animation-duration: 9s; animation-delay: -3s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-9px) rotate(2deg); }
+  }
+
+  .bristol .coords {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .08em;
+    fill: var(--muted);
+  }
+
+  /* ---------- 06 Words ---------- */
+
+  .words {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .words p {
+    margin: 0;
+    font-size: 11.6cqw;
+    font-weight: 800;
+    line-height: .96;
+    letter-spacing: -.035em;
+  }
+
+  .words span { display: block; }
+
+  .words .w1 { font-weight: 300; color: var(--fg-2); }
+
+  .words .w2 {
+    transform-origin: 0 85%;
+    animation: shrink 8s var(--ease) infinite;
+  }
+
+  @keyframes shrink {
+    0%, 30%   { transform: scale(1); }
+    42%, 64%  { transform: scale(.34); }
+    76%, 100% { transform: scale(1); }
+  }
+
+  .words .w3 {
+    width: max-content;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 92% / 0 .14em;
+    animation: underline 8s var(--ease) infinite;
+  }
+
+  @keyframes underline {
+    0%, 36%  { background-size: 0 .14em; background-position: 0 92%; }
+    50%, 84% { background-size: 100% .14em; background-position: 0 92%; }
+    84.01%   { background-position: 100% 92%; }
+    96%, 100% { background-size: 0 .14em; background-position: 100% 92%; }
+  }
+
+  .words .w4 { display: flex; align-items: flex-end; gap: .08em; }
+
+  .words .w4 svg {
+    width: .42em;
+    height: .42em;
+    margin-bottom: .12em;
+    fill: var(--accent);
+    animation: spin 14s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---------- 03 Breakout + 04 Mark ---------- */
+
+  .breakout text,
+  .mark text { font-family: var(--sans); }
+
+  .mark .txt {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .06em;
+    fill: currentColor;
+  }
+
+  .mark .net { fill: none; stroke: var(--accent); stroke-width: 1; }
+  .mark .node { fill: var(--accent); }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 1180px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 860px) {
+    .page { display: block; }
+
+    .side {
+      position: static;
+      height: auto;
+      padding: 28px 20px 8px;
+    }
+
+    .logo {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .logo svg { width: 30px; }
+
+    .menu { display: flex; flex-wrap: wrap; column-gap: 20px; }
+    .menu button, .menu a { font-size: 15px; padding: 6px 0; }
+    .rule { margin: 10px 0; }
+    .projects, nav + .rule { display: none; }
+
+    .about { padding-top: 18px; max-width: 32em; }
+    .about p { display: inline; margin: 0 8px 0 0; }
+
+    .grid { padding: 28px 20px 64px; }
+  }
+
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
   }
 </style>
 </head>
 <body>
-<pre><svg class="mark" viewBox="0 0 482 502" fill="currentColor" role="img" aria-label="*"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg>
+<div class="page">
+  <aside class="side">
+    <a class="logo" href="/" aria-label="mostlywork.ing home">
+      <svg viewBox="0 0 482 502" fill="currentColor" aria-hidden="true"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg>
+      <span>mostlywork.ing</span>
+    </a>
 
-We're a tiny software company in Bristol, UK. We make small, useful things.
+    <nav aria-label="Filter works">
+      <ul class="menu types">
+        <li><button type="button" data-filter="all" aria-pressed="true"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="3" cy="3" r="1.7"/><circle cx="9" cy="3" r="1.7"/><circle cx="3" cy="9" r="1.7"/><circle cx="9" cy="9" r="1.7"/></svg>All works <sup>6</sup></button></li>
+        <li><button type="button" data-filter="product" aria-pressed="false"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="3" cy="3" r="1.7"/><circle cx="9" cy="3" r="1.7"/><circle cx="3" cy="9" r="1.7"/><circle cx="9" cy="9" r="1.7"/></svg>Products <sup>3</sup></button></li>
+        <li><button type="button" data-filter="studio" aria-pressed="false"><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="1.5" cy="1.5" r=".9"/><circle cx="6" cy="1.5" r=".9"/><circle cx="10.5" cy="1.5" r=".9"/><circle cx="1.5" cy="6" r=".9"/><circle cx="6" cy="6" r=".9"/><circle cx="10.5" cy="6" r=".9"/><circle cx="1.5" cy="10.5" r=".9"/><circle cx="6" cy="10.5" r=".9"/><circle cx="10.5" cy="10.5" r=".9"/></svg>Studio <sup>3</sup></button></li>
+      </ul>
 
-## Projects
+      <hr class="rule">
 
-- **<a href="https://usemacro.app" target="_blank" rel="noopener noreferrer">Macro</a>** - Simple calorie counter.
-- **<a href="https://ourscene.uk" target="_blank" rel="noopener noreferrer">Scene</a>** - Letterboxd for gigs.
-- **<a href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer">Breakout</a>** - The remote breakout area.
+      <ul class="menu sectors">
+        <li><button type="button" data-filter="health" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>health</button></li>
+        <li><button type="button" data-filter="music" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>music</button></li>
+        <li><button type="button" data-filter="work" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>work</button></li>
+        <li><button type="button" data-filter="bristol" aria-pressed="false"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>bristol</button></li>
+      </ul>
+    </nav>
 
-© 2026 mostlywork.ing</pre>
+    <hr class="rule">
+
+    <ul class="menu projects">
+      <li><a href="https://usemacro.app" target="_blank" rel="noopener noreferrer" data-for="macro">Macro</a></li>
+      <li><a href="https://ourscene.uk" target="_blank" rel="noopener noreferrer" data-for="scene">Scene</a></li>
+      <li><a href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer" data-for="breakout">Breakout</a></li>
+    </ul>
+
+    <div class="about">
+      <p>We're a tiny software company in Bristol, UK. We make small, useful things.</p>
+      <p class="copy">&copy; 2026 mostlywork.ing</p>
+    </div>
+  </aside>
+
+  <main class="grid" id="works">
+
+    <!-- 01 Macro -->
+    <a class="tile" id="macro" href="https://usemacro.app" target="_blank" rel="noopener noreferrer" data-tags="product health ios">
+      <div class="art macro" aria-hidden="true">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="screen">
+            <div class="fill"><i class="touch"></i></div>
+            <div class="status"><span>19:30</span><span class="island"></span><span class="bars"><i></i><i></i><i></i></span></div>
+            <div class="adding">Adding <b>Dinner</b> at <b>19:30</b></div>
+            <div class="read"><span class="label">Calories</span><span class="num"></span><span class="unit">Kcal</span></div>
+            <span class="cancel">Cancel</span>
+          </div>
+        </div>
+        <svg class="appicon" viewBox="0 0 180 180"><rect width="180" height="180" rx="40" fill="#111"/><g fill="#fff"><rect x="50" y="28" width="8" height="42" rx="4"/><rect x="64.5" y="28" width="8" height="42" rx="4"/><rect x="79" y="28" width="8" height="42" rx="4"/><path d="M50 60H87V66C87 76 82 82 76 84V147a7 7 0 0 1-14 0V84C56 82 50 76 50 66Z"/><path d="M121 28C112 33 102 50 102 72V96C102 98 104 100 108 101L110 102V147a7.5 7.5 0 0 0 15 0V33C125 29 123 27 121 28Z"/></g></svg>
+      </div>
+      <div class="cap">
+        <h2>Macro <span>Simple calorie counter</span></h2>
+        <p>ios, health, beta</p>
+      </div>
+    </a>
+
+    <!-- 02 Scene -->
+    <a class="tile" id="scene" href="https://ourscene.uk" target="_blank" rel="noopener noreferrer" data-tags="product music ios">
+      <div class="art scene" aria-hidden="true">
+        <div class="stack">
+          <div class="stub">
+            <div class="ticket">
+              <div class="main">
+                <div class="date"><b>05</b><small>MAR</small></div>
+                <div><h3>Bodysnatcher &amp; Ingested</h3><p class="venue">The Fleece &middot; 19:00</p><p class="stars">★★★★★</p></div>
+              </div>
+              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
+            </div>
+          </div>
+          <div class="stub">
+            <div class="ticket">
+              <div class="main">
+                <div class="date"><b>10</b><small>MAR</small></div>
+                <div><h3>Hot Mulligan</h3><p class="venue">The Prospect Building &middot; 19:30</p><p class="stars">★★★★★</p></div>
+              </div>
+              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
+            </div>
+          </div>
+          <div class="stub">
+            <div class="ticket">
+              <div class="main">
+                <div class="date"><b>23</b><small>MAY</small></div>
+                <div><h3>Toothache + Support</h3><p class="venue">The Croft &middot; 19:00</p><p class="via">via Headfirst</p></div>
+              </div>
+              <div class="end"><svg viewBox="0 0 685 767"><path fill="#fff" d="M684.847 271.376V80.3079L520.752 0L164.217 173.765V334.565L0 414.727V605.642L328.611 766.296L685 592.232V400.896L552.155 335.91L684.847 271.376ZM356.236 271.376L657.337 124.431V253.951L356.236 400.896V271.376ZM328.607 575.228L191.869 641.86V511.497L328.607 444.716L493.123 364.523V494.196L328.607 574.389V575.228ZM657.364 575.228L356.232 722.05V592.232L520.748 511.503L657.333 444.871L657.364 575.228Z"/></svg><span>ADMIT</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="venues"><span>The Fleece · Trinity · Exchange · The Croft · SWX · Marble Factory · The Prospect Building · Thekla · Rough Trade Bristol · The Louisiana · The Fleece · Trinity · Exchange · The Croft · SWX · Marble Factory · The Prospect Building · Thekla · Rough Trade Bristol · The Louisiana · </span></div>
+      </div>
+      <div class="cap">
+        <h2>Scene <span>Letterboxd for gigs</span></h2>
+        <p>ios, music, beta</p>
+      </div>
+    </a>
+
+    <!-- 03 Breakout -->
+    <a class="tile" id="breakout" href="https://www.letsbreakout.com/" target="_blank" rel="noopener noreferrer" data-tags="product work browser">
+      <div class="art breakout" aria-hidden="true">
+        <svg viewBox="0 0 400 300">
+          <defs>
+            <pattern id="bo-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r=".9" fill="#cdd2da"/></pattern>
+            <linearGradient id="bo-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FD5600"/><stop offset=".58" stop-color="#FF2709"/><stop offset="1" stop-color="#FF221E"/></linearGradient>
+            <path id="bo-cursor" d="M.47 9.35L31.79 89.67C32.9 92.57 35.69 94.49 38.8 94.5H39.2C42.29 94.37 44.93 92.24 45.72 89.26L53.47 53.48L89.06 45.76C92.13 45.02 94.34 42.34 94.49 39.19C94.65 35.95 92.71 32.96 89.68 31.8L9.36.48C6.83-.52 3.94.08 2.01 2C.08 3.93-.52 6.81.47 9.35Z"/>
+          </defs>
+
+          <!-- board -->
+          <rect x="50" y="38" width="300" height="212" rx="20" fill="#fde6e2"/>
+          <rect x="57" y="45" width="286" height="198" rx="14" fill="#f8f9fb"/>
+          <rect x="57" y="45" width="286" height="198" rx="14" fill="url(#bo-dots)"/>
+
+          <!-- chrome -->
+          <g stroke="#e6e8ed" fill="#fff">
+            <rect x="66" y="54" width="54" height="17" rx="4.5"/>
+            <rect x="158" y="54" width="84" height="19" rx="5"/>
+            <rect x="306" y="54" width="28" height="12" rx="6"/>
+            <rect x="148" y="222" width="104" height="14" rx="7"/>
+          </g>
+          <text x="72" y="65.5" font-size="6.5" font-weight="700" fill="#111">breakout</text>
+          <circle cx="104" cy="62.5" r="2.6" fill="#ffb4a6"/><circle cx="110" cy="62.5" r="2.6" fill="#9ab8ff"/>
+          <rect x="164" y="59" width="9" height="9" rx="2.2" fill="url(#bo-red)"/>
+          <rect x="178" y="59" width="9" height="9" rx="2.2" fill="#111"/>
+          <g fill="#eceef2"><rect x="192" y="59" width="9" height="9" rx="2.2"/><rect x="206" y="59" width="9" height="9" rx="2.2"/><rect x="220" y="59" width="9" height="9" rx="2.2"/></g>
+          <text x="320" y="62.3" font-size="5" font-weight="700" fill="#2f6bff" text-anchor="middle">sign in</text>
+          <rect x="154" y="225.5" width="7" height="7" rx="1.8" fill="#2f6bff"/>
+          <g fill="#c9ced6"><rect x="167" y="228" width="6" height="2" rx="1"/><rect x="178" y="228" width="6" height="2" rx="1"/><rect x="189" y="228" width="6" height="2" rx="1"/><rect x="200" y="228" width="6" height="2" rx="1"/><rect x="211" y="228" width="6" height="2" rx="1"/><rect x="222" y="228" width="6" height="2" rx="1"/><rect x="233" y="228" width="6" height="2" rx="1"/></g>
+
+          <!-- sticky note, placed by the green cursor -->
+          <g transform="translate(140 116)">
+            <g>
+              <animateTransform attributeName="transform" type="scale" dur="8s" repeatCount="indefinite" values="0;0;1.1;1;1;0;0" keyTimes="0;.2;.24;.27;.86;.9;1"/>
+              <g transform="rotate(-6)">
+                <rect x="-25" y="-23" width="50" height="46" rx="2" fill="#ffe27a"/>
+                <path d="M25 13V23H15Z" fill="#f2cd50"/>
+                <text x="-18" y="-7" font-size="8" font-weight="700" fill="#5d4a00">standup</text>
+                <text x="-18" y="5" font-size="7" fill="#7a6400">10:00 ☕</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- the doodle, drawn by "you" -->
+          <path id="bo-doodle" d="M92 186C104 142 140 128 154 152S168 202 196 188S220 120 252 134S270 182 300 164" fill="none" stroke="#ff2709" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1.02" stroke-dashoffset="1">
+            <animate attributeName="stroke-dashoffset" dur="8s" repeatCount="indefinite" values="1;0;0;1" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1"/>
+          </path>
+
+          <!-- reactions -->
+          <text x="176" y="112" font-size="15" opacity="0">🎉
+            <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.46;.5;.56;.64;1"/>
+            <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -20;0 -20" keyTimes="0;.46;.64;1"/>
+          </text>
+          <text x="274" y="94" font-size="13" opacity="0">👋
+            <animate attributeName="opacity" dur="8s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.06;.1;.16;.24;1"/>
+            <animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0;0 0;0 -16;0 -16" keyTimes="0;.06;.24;1"/>
+          </text>
+
+          <!-- blue cursor, idling -->
+          <g>
+            <animateMotion dur="8s" repeatCount="indefinite" path="M298 104C318 128 294 150 270 134S262 86 298 104Z"/>
+            <use href="#bo-cursor" transform="scale(.16)" fill="#2f6bff" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+            <rect x="12" y="13" width="18" height="10" rx="5" fill="#2f6bff"/>
+            <text x="21" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">jo</text>
+          </g>
+
+          <!-- green cursor, brings the sticky -->
+          <g>
+            <animateMotion dur="8s" repeatCount="indefinite" values="84,214;158,136;158,136;232,198;84,214" keyTimes="0;.2;.58;.8;1" calcMode="spline" keySplines=".5 0 .2 1;0 0 1 1;.5 0 .2 1;.5 0 .2 1"/>
+            <use href="#bo-cursor" transform="scale(.16)" fill="#16a34a" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+            <rect x="12" y="13" width="24" height="10" rx="5" fill="#16a34a"/>
+            <text x="24" y="20.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">sam</text>
+          </g>
+
+          <!-- red cursor, the Breakout mark -->
+          <g>
+            <animateMotion dur="8s" repeatCount="indefinite" keyPoints="0;1;1;0" keyTimes="0;.45;.8;1" calcMode="spline" keySplines=".45 0 .25 1;0 0 1 1;.45 0 .25 1">
+              <mpath href="#bo-doodle"/>
+            </animateMotion>
+            <use href="#bo-cursor" transform="scale(.17)" fill="url(#bo-red)" stroke="#fff" stroke-width="12" paint-order="stroke"/>
+            <rect x="13" y="14" width="22" height="10" rx="5" fill="#ff2709"/>
+            <text x="24" y="21.3" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle">you</text>
+          </g>
+        </svg>
+      </div>
+      <div class="cap">
+        <h2>Breakout <span>The remote breakout area</span></h2>
+        <p>browser, work, free</p>
+      </div>
+    </a>
+
+    <!-- 04 Mark -->
+    <article class="tile" data-tags="studio">
+      <div class="art mark" aria-hidden="true">
+        <svg viewBox="0 0 400 300">
+          <polygon class="net" points=""/>
+          <g class="pieces" fill="currentColor">
+            <path d="M192.482 0H289.518L278.383 250.545H203.617Z"/>
+            <path d="M432.686 87.4918L482 162.257L260.089 279.178L222.706 221.116Z"/>
+            <path d="M482 338.036L432.686 412.802L222.706 279.178L260.089 221.116Z"/>
+            <path d="M192.482 501.089L203.617 250.545H278.383L289.518 501.089Z"/>
+            <path d="M0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393Z"/>
+            <path d="M0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178Z"/>
+          </g>
+          <g class="nodes"><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/><rect class="node"/></g>
+          <text class="txt" x="44" y="56"><tspan x="44">MOSTLY</tspan><tspan x="44" dy="12">WORK</tspan><tspan x="44" dy="12">.ING</tspan></text>
+          <text class="txt" x="356" y="222" text-anchor="end"><tspan x="356">SMALL</tspan><tspan x="356" dy="12">USEFUL</tspan><tspan x="356" dy="12">THINGS</tspan></text>
+          <text class="txt" x="356" y="56" text-anchor="end"><tspan x="356">BRISTOL</tspan><tspan x="356" dy="12">UK</tspan></text>
+          <text class="txt" x="44" y="222"><tspan x="44">TINY</tspan><tspan x="44" dy="12">SOFTWARE</tspan><tspan x="44" dy="12">CO.</tspan></text>
+        </svg>
+      </div>
+      <div class="cap">
+        <h2>mostlywork.ing <span>Studio mark</span></h2>
+        <p>identity, studio</p>
+      </div>
+    </article>
+
+    <!-- 05 Bristol -->
+    <article class="tile" data-tags="studio bristol">
+      <div class="art bristol" aria-hidden="true">
+        <svg viewBox="0 0 400 300">
+          <defs>
+            <linearGradient id="br-a" x1="0" x2="1"><stop offset="0" stop-color="#ff5b2e"/><stop offset=".2" stop-color="#ff5b2e"/><stop offset=".2" stop-color="#ffc83d"/><stop offset=".4" stop-color="#ffc83d"/><stop offset=".4" stop-color="#ff5b2e"/><stop offset=".6" stop-color="#ff5b2e"/><stop offset=".6" stop-color="#ffc83d"/><stop offset=".8" stop-color="#ffc83d"/><stop offset=".8" stop-color="#ff5b2e"/></linearGradient>
+            <linearGradient id="br-b" x1="0" x2="1"><stop offset="0" stop-color="#2b4bff"/><stop offset=".25" stop-color="#2b4bff"/><stop offset=".25" stop-color="#9fb0ff"/><stop offset=".5" stop-color="#9fb0ff"/><stop offset=".5" stop-color="#2b4bff"/><stop offset=".75" stop-color="#2b4bff"/><stop offset=".75" stop-color="#9fb0ff"/></linearGradient>
+            <path id="br-envelope" d="M0-20C14-20 19-7 13 6C10 12 5 16 3.5 19H-3.5C-5 16-10 12-13 6C-19-7-14-20 0-20Z"/>
+          </defs>
+
+          <!-- balloons -->
+          <g transform="translate(300 66) scale(1.25)"><g class="balloon">
+            <use href="#br-envelope" fill="url(#br-a)"/>
+            <path class="line thin" d="M-3.5 19L-2.6 23.5M3.5 19L2.6 23.5"/>
+            <rect x="-3" y="23.5" width="6" height="4.5" rx="1" fill="currentColor"/>
+          </g></g>
+          <g transform="translate(92 92) scale(.72)"><g class="balloon small">
+            <use href="#br-envelope" fill="url(#br-b)"/>
+            <path class="line thin" d="M-3.5 19L-2.6 23.5M3.5 19L2.6 23.5"/>
+            <rect x="-3" y="23.5" width="6" height="4.5" rx="1" fill="currentColor"/>
+          </g></g>
+
+          <!-- gorge -->
+          <path class="line" d="M24 178H112C120 204 130 236 148 264"/>
+          <path class="line" d="M376 178H288C280 204 270 236 252 264"/>
+          <path class="line thin" d="M104 190l-10 10M110 208l-14 14M117 228l-12 12M126 245l-8 8M296 190l10 10M290 208l14 14M283 228l12 12M274 245l8 8"/>
+          <path class="line thin river" d="M146 268C170 263 230 273 254 268"/>
+          <path class="line thin river" d="M162 276C186 272 214 280 238 276" style="animation-duration:9s"/>
+
+          <!-- bridge -->
+          <path class="line" d="M125 118Q200 226 275 118"/>
+          <path class="line thin" d="M125 122Q200 230 275 122"/>
+          <path class="line thin" d="M125 118Q96 152 58 178M275 118Q304 152 342 178"/>
+          <path class="line thin" d="M135 133.9V178M145 145.5V178M155 155.1V178M165 162.7V178M175 168.5V178M235 168.5V178M245 155.1V178M255 145.5V178M265 133.9V178"/>
+          <path class="line" d="M115 178L117.5 114H132.5L135 178M120.5 178V152a4.5 4.5 0 0 1 9 0V178M114 114H136"/>
+          <path class="line" d="M265 178L267.5 114H282.5L285 178M270.5 178V152a4.5 4.5 0 0 1 9 0V178M264 114H286"/>
+          <path class="line deck" d="M92 178H308"/>
+          <rect class="car" x="96" y="173.4" width="8" height="3.4" rx="1.4"/>
+          <rect class="car back" x="96" y="173.4" width="6" height="3.4" rx="1.4"/>
+
+          <text class="coords" x="200" y="296" text-anchor="middle">51°27′18″N  2°37′39″W</text>
+        </svg>
+      </div>
+      <div class="cap">
+        <h2>Bristol, UK <span>Where we work</span></h2>
+        <p>bristol, home</p>
+      </div>
+    </article>
+
+    <!-- 06 Words -->
+    <article class="tile" data-tags="studio">
+      <div class="art words" aria-hidden="true">
+        <p>
+          <span class="w1">we make</span>
+          <span class="w2">small,</span>
+          <span class="w3">useful</span>
+          <span class="w4">things<svg viewBox="0 0 482 502"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg></span>
+        </p>
+      </div>
+      <div class="cap">
+        <h2>Small, useful things <span>What we make</span></h2>
+        <p>studio, words</p>
+      </div>
+    </article>
+
+  </main>
+</div>
+
+<script>
+(() => {
+  const grid = document.getElementById('works');
+  const tiles = [...grid.querySelectorAll('.tile')];
+  const buttons = [...document.querySelectorAll('[data-filter]')];
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- filters ---------- */
+
+  tiles.forEach((t, i) => { t.style.viewTransitionName = 'tile-' + i; });
+
+  function apply(filter) {
+    tiles.forEach(t => {
+      t.hidden = filter !== 'all' && !t.dataset.tags.split(' ').includes(filter);
+    });
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+  }
+
+  function select(filter, push) {
+    if (!buttons.some(b => b.dataset.filter === filter)) filter = 'all';
+    if (push) history.replaceState(null, '', filter === 'all' ? location.pathname : '#' + filter);
+    if (document.startViewTransition && !still.matches) document.startViewTransition(() => apply(filter));
+    else apply(filter);
+  }
+
+  buttons.forEach(b => b.addEventListener('click', () => {
+    const on = b.getAttribute('aria-pressed') === 'true';
+    select(on ? 'all' : b.dataset.filter, true);
+  }));
+
+  apply(buttons.some(b => b.dataset.filter === location.hash.slice(1)) ? location.hash.slice(1) : 'all');
+  addEventListener('hashchange', () => select(location.hash.slice(1), false));
+
+  /* ---------- sidebar hover highlights its tile ---------- */
+
+  document.querySelectorAll('[data-for]').forEach(a => {
+    const tile = document.getElementById(a.dataset.for);
+    a.addEventListener('mouseenter', () => { grid.classList.add('dim'); tile.classList.add('hl'); });
+    a.addEventListener('mouseleave', () => { grid.classList.remove('dim'); tile.classList.remove('hl'); });
+  });
+
+  /* ---------- pause art that is off-screen ---------- */
+
+  const smil = document.querySelector('.breakout svg');
+
+  function syncSmil(visible) {
+    if (still.matches) { smil.setCurrentTime(4.2); smil.pauseAnimations(); }
+    else if (visible) smil.unpauseAnimations();
+    else smil.pauseAnimations();
+  }
+
+  const visible = new Set();
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      e.target.classList.toggle('is-paused', !e.isIntersecting);
+      e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      if (e.target.contains(smil)) syncSmil(e.isIntersecting);
+    });
+  });
+  tiles.forEach(t => io.observe(t));
+  still.addEventListener('change', () => syncSmil(visible.has(smil.closest('.tile'))));
+
+  /* ---------- the studio mark: bars breathe, the net follows, words scramble ---------- */
+
+  const mark = document.querySelector('.mark svg');
+  const markTile = mark.closest('.tile');
+  const pieces = [...mark.querySelectorAll('.pieces path')];
+  const nodes = [...mark.querySelectorAll('.node')];
+  const net = mark.querySelector('.net');
+  const group = mark.querySelector('.pieces');
+
+  const C = [241, 250.5];
+  const tips = [[241, 0], [457.3, 124.9], [457.3, 375.4], [241, 501.1], [24.7, 377], [24.7, 124.9]];
+  const dirs = tips.map(([x, y]) => { const dx = x - C[0], dy = y - C[1], l = Math.hypot(dx, dy); return [dx / l, dy / l]; });
+  const sizes = [[10, 10], [6, 6], [14, 8], [7, 7], [12, 12], [5, 5]];
+  const S = .2, T = 7000;
+
+  const bump = x => { x = ((x % 1) + 1) % 1; return x < .4 ? Math.sin(Math.PI * x / .4) ** 2 : 0; };
+
+  function drawMark(ms) {
+    const p = ms / T;
+    const rot = 5 * Math.sin(2 * Math.PI * p) * Math.PI / 180;
+    const cos = Math.cos(rot), sin = Math.sin(rot);
+    group.setAttribute('transform', `translate(200 150) rotate(${rot * 180 / Math.PI}) scale(${S}) translate(${-C[0]} ${-C[1]})`);
+    const pts = [];
+    pieces.forEach((el, i) => {
+      const d = 48 * bump(p - i / 6);
+      el.setAttribute('transform', `translate(${dirs[i][0] * d} ${dirs[i][1] * d})`);
+      const out = 70 + 60 * bump(p * 2 - i / 3 + .2) + d;
+      const lx = (tips[i][0] - C[0] + dirs[i][0] * out) * S;
+      const ly = (tips[i][1] - C[1] + dirs[i][1] * out) * S;
+      const x = 200 + lx * cos - ly * sin, y = 150 + lx * sin + ly * cos;
+      const [w, h] = sizes[i];
+      nodes[i].setAttribute('x', x - w / 2); nodes[i].setAttribute('y', y - h / 2);
+      nodes[i].setAttribute('width', w); nodes[i].setAttribute('height', h);
+      pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+    });
+    net.setAttribute('points', pts.join(' '));
+  }
+
+  const spans = [...mark.querySelectorAll('tspan')].map(el => ({ el, text: el.textContent }));
+  const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.*#/';
+  let nextScramble = 2600, scrambleEnd = 0, lastScrambleFrame = 0;
+
+  function scramble(ms) {
+    if (ms > nextScramble && !scrambleEnd) { scrambleEnd = ms + 700; }
+    if (scrambleEnd) {
+      if (ms - lastScrambleFrame < 60) return;
+      lastScrambleFrame = ms;
+      const k = 1 - (scrambleEnd - ms) / 700;
+      spans.forEach(({ el, text }) => {
+        el.textContent = [...text].map((c, i) => i / text.length < k ? c : glyphs[Math.random() * glyphs.length | 0]).join('');
+      });
+      if (ms >= scrambleEnd) {
+        spans.forEach(({ el, text }) => { el.textContent = text; });
+        scrambleEnd = 0;
+        nextScramble = ms + 3200;
+      }
+    }
+  }
+
+  let start = performance.now() - T * .12, paused = 0;
+  function frame(now) {
+    if (still.matches || !visible.has(markTile)) { paused = paused || now; }
+    else {
+      if (paused) { start += now - paused; paused = 0; }
+      const ms = now - start;
+      drawMark(ms);
+      scramble(ms);
+    }
+    requestAnimationFrame(frame);
+  }
+  drawMark(T * .12);
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
