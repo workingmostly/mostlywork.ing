@@ -1,6 +1,6 @@
 *
 
-We're a tiny product design studio from Bristol. We make small, useful things.
+We're a tiny product design company from Bristol. We make small, useful things.
 
 ## Projects
 
