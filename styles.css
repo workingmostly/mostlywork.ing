@@ -1,0 +1,448 @@
+/* mostlywork.ing */
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("/fonts/instrument-sans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TRIAL licence only: replace with licensed files before this goes live. */
+@font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-semibold-trial.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-italic-trial.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  --paper: #ffffff;
+  --ink: #141413;
+
+  /* Characters the display face lacks (e.g. ’) fall back to the sans. */
+  --display: "TRJN DaVinci", var(--sans);
+  --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --body-size: clamp(18px, 1.6vw, 22px);
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --bleed: 12px;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--gutter);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--body-size);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-kerning: normal;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+p,
+ol {
+  margin: 0;
+}
+
+h2 {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+  Type: three styles, used everywhere, all in ink.
+  1. Display  TRJN DaVinci Semibold  the page heading  (.intro h1)
+  2. Title    TRJN DaVinci Italic    project names     (.project-name)
+  3. Body     Instrument Sans        everything else   (body)
+*/
+
+/* Masthead */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.home {
+  display: block;
+  margin: -6px;
+  padding: 6px;
+}
+
+/* The ✱ logo (482 × 502) */
+.logo {
+  display: block;
+  width: 27px;
+  height: 28px;
+  fill: currentColor;
+}
+
+/* Intro */
+
+.intro {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: baseline;
+  padding: clamp(56px, 16vh, 184px) 0 clamp(72px, 14vh, 152px);
+}
+
+.intro h1 {
+  grid-column: 1 / -1;
+  font-family: var(--display);
+  /* One line that fills the column: "mostlywork.ing" is 6.45em wide. */
+  font-size: min(calc((100vw - 2 * var(--gutter)) / 6.55), 300px);
+  font-size: min(calc(100cqi / 6.55), 300px);
+  font-weight: 600;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+}
+
+/* On narrow screens one line would be small, so it breaks after "mostly"
+   (at the <wbr>) and "work.ing", 3.68em wide, fills the column. */
+@container (max-width: 520px) {
+  .intro h1 {
+    font-size: calc(100cqi / 3.74);
+    /* Just enough to keep the y of "mostly" off the dot of the i */
+    line-height: 1;
+  }
+}
+
+/* 404: a sentence, so it wraps naturally at a more modest size */
+.statement h1 {
+  max-width: 14ch;
+  font-size: min(15.2cqi, calc(20px + 9.5cqi), 184px);
+  line-height: 0.82;
+  text-wrap: balance;
+}
+
+.lede {
+  grid-column: 1 / span 6;
+  margin-top: clamp(24px, 4vw, 48px);
+  text-wrap: pretty;
+}
+
+.lede a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.lede a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Homepage: main is the grid. The intro's children join it, so the
+   contact block (after the projects in the HTML) can sit beside the lede
+   on wider screens and follow the projects on phones. */
+
+.homepage {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: baseline;
+  align-content: start;
+  padding-top: clamp(56px, 16vh, 184px);
+}
+
+.homepage > .intro {
+  display: contents;
+  /* main is the size container here, not the intro */
+  container-type: normal;
+}
+
+.homepage .contact {
+  grid-row: 2;
+}
+
+.homepage > .projects {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  align-self: start;
+  margin-top: clamp(72px, 14vh, 152px);
+}
+
+/* Contact */
+
+.contact {
+  grid-column: 9 / -1;
+  margin-top: clamp(24px, 4vw, 48px);
+  font-style: normal;
+}
+
+.contact dl,
+.contact dd {
+  margin: 0;
+}
+
+.contact dd + dt {
+  margin-top: 1.3em;
+}
+
+.contact a {
+  text-decoration: none;
+}
+
+.contact a:hover,
+.contact a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.intro > * {
+  animation: rise 0.9s var(--ease-out) backwards;
+}
+
+.intro > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.intro > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+/* Projects */
+
+.projects {
+  padding-bottom: clamp(72px, 12vh, 128px);
+}
+
+.projects h2 {
+  padding-bottom: 14px;
+}
+
+.index {
+  list-style: none;
+  margin: 0 calc(-1 * var(--bleed));
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.index li {
+  border-bottom: 1px solid var(--ink);
+  animation: rise 0.9s var(--ease-out) backwards;
+  animation-delay: calc(0.16s + var(--i, 0) * 0.07s);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: baseline;
+  column-gap: 24px;
+  padding: clamp(18px, 2.4vw, 30px) var(--bleed);
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
+}
+
+.project:hover,
+.project:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.project:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: -6px;
+}
+
+.project-num {
+  grid-column: span 1;
+}
+
+.project-name {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 76px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  grid-column: span 4;
+}
+
+.project-desc {
+  grid-column: span 4;
+  text-wrap: pretty;
+}
+
+.project-url {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  grid-column: span 3;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+/* ↗ drawn to Instrument Sans's metrics: 0.72em cap height, 0.08em stems.
+   It sits on the baseline, so it lines up with the text on every device
+   (the font has no ↗ glyph, so a text arrow would come from a fallback). */
+.arrow {
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  overflow: visible;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.project:hover .arrow,
+.project:focus-visible .arrow {
+  transform: translate(3px, -3px);
+}
+
+/* Colophon */
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 24px 0 28px;
+}
+
+/* Small screens */
+
+@media (max-width: 860px) {
+  :root {
+    --bleed: 8px;
+  }
+
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .homepage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lede,
+  .contact {
+    grid-column: 1 / -1;
+  }
+
+  /* Phones: the contact block follows the projects */
+  .homepage .contact,
+  .homepage > .projects {
+    grid-row: auto;
+  }
+
+  .homepage .contact {
+    margin-top: 0;
+    padding-bottom: 24px;
+  }
+
+  .project {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "num url"
+      "name name"
+      "desc desc";
+    row-gap: 10px;
+  }
+
+  .project-num {
+    grid-area: num;
+  }
+
+  .project-name {
+    grid-area: name;
+    margin-top: 6px;
+  }
+
+  .project-desc {
+    grid-area: desc;
+  }
+
+  .project-url {
+    grid-area: url;
+  }
+}
+
+/* Motion */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
