@@ -266,8 +266,10 @@ a {
   animation-delay: 0.08s;
 }
 
-.intro > :nth-child(3) {
-  animation-delay: 0.16s;
+/* The contact block lives outside the intro (so it can follow the projects
+   on phones) but rises in with it, just after the lede. */
+.contact {
+  animation: rise 0.9s var(--ease-out) 0.16s backwards;
 }
 
 /* Projects */
