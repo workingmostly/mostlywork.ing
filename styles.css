@@ -40,6 +40,12 @@
 
   --gutter: clamp(16px, 4vw, 48px);
   --bleed: 12px;
+
+  /* Space under the ✱ logo, in proportion to the heading below it. On one
+     line (the heading's size is about the content width / 6.55) its
+     ascenders rise about 0.11em above the line box, so the gap allows for
+     that plus about 0.1em of clear space. */
+  --logo-gap: calc(min((100vw - 2 * var(--gutter)) / 6.55, 300px) * 0.21);
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -122,12 +128,14 @@ a {
 
 /* Masthead */
 
+/* The page's top space sits above the logo, so the ✱ rests just over
+   the heading. */
 .masthead {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 24px 0;
+  padding: clamp(56px, 16vh, 184px) 0 var(--logo-gap, 24px);
 }
 
 .home {
@@ -139,8 +147,9 @@ a {
 /* The ✱ logo (482 × 502) */
 .logo {
   display: block;
-  width: 27px;
-  height: 28px;
+  height: clamp(40px, 4.5vw, 72px);
+  width: auto;
+  aspect-ratio: 482 / 502;
   fill: currentColor;
 }
 
@@ -152,7 +161,7 @@ a {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
   align-items: baseline;
-  padding: clamp(56px, 16vh, 184px) 0 clamp(72px, 14vh, 152px);
+  padding: 0 0 clamp(72px, 14vh, 152px);
 }
 
 .intro h1 {
@@ -212,7 +221,6 @@ a {
   column-gap: 24px;
   align-items: baseline;
   align-content: start;
-  padding-top: clamp(56px, 16vh, 184px);
 }
 
 .homepage > .intro {
@@ -403,6 +411,15 @@ a {
   justify-content: space-between;
   gap: 8px 24px;
   padding: 24px 0 28px;
+}
+
+/* Two-line heading (content under 520px wide, so viewport under ~565px):
+   size the logo gap from that larger size. Its line height is 1, so the
+   ascenders barely overhang. */
+@media (max-width: 565px) {
+  :root {
+    --logo-gap: calc((100vw - 2 * var(--gutter)) / 3.74 * 0.16);
+  }
 }
 
 /* Small screens */
