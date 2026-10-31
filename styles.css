@@ -158,8 +158,10 @@ a {
 .intro h1 {
   grid-column: 1 / -1;
   font-family: var(--display);
-  font-size: clamp(40px, 11vw, 184px);
-  font-size: clamp(40px, 11cqi, 184px);
+  /* "mostlywork.ing" is 6.45em wide. Fill the column on phones (15.2%),
+     easing to its desktop size (147px at 1440) and capping at 184px. */
+  font-size: min(15.2vw, calc(20px + 9.5vw), 184px);
+  font-size: min(15.2cqi, calc(20px + 9.5cqi), 184px);
   font-weight: 600;
   line-height: 0.82;
   letter-spacing: -0.05em;
