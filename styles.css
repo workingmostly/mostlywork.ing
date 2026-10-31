@@ -189,11 +189,6 @@ a {
   display: block;
 }
 
-/* A blank line between the sentences, the same as the gaps in the contact block */
-.lede-fit > span + span {
-  margin-top: 1.3em;
-}
-
 .lede a {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.15em;
