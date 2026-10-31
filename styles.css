@@ -12,8 +12,8 @@
 /* TRIAL licence only: replace with licensed files before this goes live. */
 @font-face {
   font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-bold-trial.woff2") format("woff2");
-  font-weight: 700;
+  src: url("/fonts/trjn-davinci-semibold-trial.woff2") format("woff2");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -168,7 +168,7 @@ a {
   font-family: var(--display);
   font-size: clamp(40px, 11vw, 184px);
   font-size: clamp(40px, 11cqi, 184px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 0.82;
   letter-spacing: -0.05em;
   text-wrap: balance;
