@@ -9,6 +9,15 @@
   font-display: swap;
 }
 
+/* TRIAL licence only: replace with licensed files before this goes live. */
+@font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-regular-trial.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "DM Mono";
   src: url("/fonts/dm-mono.woff2") format("woff2");
@@ -24,8 +33,8 @@
   --ink: #141413;
   --ink-soft: #5b5954;
 
-  /* Headings. Swap in the display face here once its files are in /fonts. */
-  --display: var(--sans);
+  /* Headings. Characters the display face lacks (e.g. ’) fall back to the sans. */
+  --display: "TRJN DaVinci", var(--sans);
   --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
@@ -155,17 +164,17 @@ a {
 .intro h1 {
   grid-column: 1 / -1;
   font-family: var(--display);
-  font-size: clamp(40px, 10.2vw, 168px);
-  font-size: clamp(40px, 10.2cqi, 168px);
-  font-weight: 500;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-size: clamp(40px, 11vw, 184px);
+  font-size: clamp(40px, 11cqi, 184px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
   text-wrap: balance;
   overflow-wrap: break-word;
 }
 
 .statement h1 {
-  max-width: 11ch;
+  max-width: 14ch;
 }
 
 .lede {
@@ -302,9 +311,9 @@ a {
 .project-name {
   font-family: var(--display);
   font-size: clamp(32px, 4.4vw, 64px);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.01em;
   grid-column: span 4;
 }
 
