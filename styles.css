@@ -173,7 +173,6 @@ a {
 
 .lede {
   grid-column: 1 / span 6;
-  max-width: 30ch;
   margin-top: clamp(24px, 4vw, 48px);
   text-wrap: pretty;
 }
