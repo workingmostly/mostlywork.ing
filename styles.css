@@ -338,6 +338,12 @@ a {
    over a gap where neither is hovered, which made the fill flicker. */
 .project {
   margin-bottom: -1px;
+}
+
+/* On load the row's contents rise, not the link itself, so its hover area
+   never moves under a still pointer (which could hand the hover to the
+   next row). */
+.project > * {
   animation: rise 0.9s var(--ease-out) backwards;
   animation-delay: calc(0.24s + var(--i, 0) * 0.08s);
 }
@@ -350,11 +356,6 @@ a {
   padding: clamp(18px, 2.4vw, 30px) var(--bleed) calc(clamp(18px, 2.4vw, 30px) + 1px);
   text-decoration: none;
   transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
-}
-
-.project:focus-visible {
-  background: var(--ink);
-  color: var(--paper);
 }
 
 /* Only on devices that really hover, so a tapped row on a phone doesn't
@@ -370,9 +371,12 @@ a {
   }
 }
 
+/* Keyboard focus is a ring, not the black fill. A clicked row keeps focus
+   (its link opens a new tab), and after any key press browsers show that
+   focus, so a fill here lit up a second row while another was hovered. */
 .project:focus-visible {
-  outline: 2px solid var(--paper);
-  outline-offset: -6px;
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
 }
 
 .project-num {
