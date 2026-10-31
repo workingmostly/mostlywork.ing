@@ -145,10 +145,15 @@ a {
 
 .intro {
   container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: baseline;
   padding: clamp(56px, 16vh, 184px) 0 clamp(72px, 14vh, 152px);
 }
 
 .intro h1 {
+  grid-column: 1 / -1;
   font-family: var(--display);
   font-size: clamp(40px, 10.2vw, 168px);
   font-size: clamp(40px, 10.2cqi, 168px);
@@ -164,6 +169,7 @@ a {
 }
 
 .lede {
+  grid-column: 1 / span 6;
   max-width: 30ch;
   margin-top: clamp(24px, 4vw, 48px);
   font-size: clamp(20px, 2vw, 28px);
@@ -183,12 +189,46 @@ a {
   text-decoration-thickness: 2px;
 }
 
+/* Contact, beside the lede */
+
+.contact {
+  grid-column: 9 / -1;
+  margin-top: clamp(24px, 4vw, 48px);
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-style: normal;
+  line-height: 1.3;
+}
+
+.contact dl,
+.contact dd {
+  margin: 0;
+}
+
+.contact dd + dt {
+  margin-top: 1.3em;
+}
+
+.contact a {
+  text-decoration: none;
+}
+
+.contact a:hover,
+.contact a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
 .intro > * {
   animation: rise 0.9s var(--ease-out) backwards;
 }
 
 .intro > :nth-child(2) {
   animation-delay: 0.08s;
+}
+
+.intro > :nth-child(3) {
+  animation-delay: 0.16s;
 }
 
 /* Projects */
@@ -304,6 +344,19 @@ a {
 @media (max-width: 860px) {
   :root {
     --bleed: 8px;
+  }
+
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lede,
+  .contact {
+    grid-column: 1 / -1;
+  }
+
+  .contact {
+    margin-top: 32px;
   }
 
   .project {
