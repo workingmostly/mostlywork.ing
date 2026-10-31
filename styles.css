@@ -185,7 +185,9 @@ a {
 }
 
 .lede {
-  grid-column: 1 / span 6;
+  /* Eight columns: room for the lede on one line on desktop, stopping
+     just short of the contact block at column 9. */
+  grid-column: 1 / span 8;
   margin-top: clamp(24px, 4vw, 48px);
   text-wrap: pretty;
 }
