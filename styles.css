@@ -144,81 +144,49 @@ a {
   fill: currentColor;
 }
 
-/* Intro
-
-   The homepage heading is set in three lines, the last pushed out to the
-   right edge, so the name becomes a pun: mostly / work / .ing. The 404
-   heading stacks the same way but stays flush left.
-
-   Phones: the first line fills the width and the second sits under it,
-   flush left ("work" tucks its k between the t and the l of "mostly").
-   The lede is an ordinary full-width paragraph underneath.
-
-   Wider screens (homepage): the three parts step down the page in equal
-   strides. The first line starts at the left edge, the last ends at the
-   right edge and the middle starts halfway between them. The lede fills
-   the space the steps leave, its last line on the baseline of ".ing".
-
-   Sizes come from the inked widths of the Semibold at -0.05em tracking:
-   "mostly" 2.83em; "work" 2.16em, starting 0.02em left of its box;
-   ".ing" 1.60em, ending 0.06em past its box. */
+/* Intro */
 
 .intro {
   container-type: inline-size;
-  --w: 100cqi;
-  /* Inked width of the widest line and of the last line, in em, and how
-     far the last line inks past its box. */
-  --lead: 2.83;
-  --tail: 1.6;
-  --overhang: 0.06em;
-  /* As big as the widest line allows, unless the screen is short: then
-     small enough for the three lines to fit on the first screen. */
-  --fit: calc(var(--w) / (var(--lead) + 0.01));
-  --display-size: min(var(--fit), max(96px, calc((100svh - 260px) / 2.5)));
-  /* Where the last line starts inking */
-  --step: calc(var(--w) - var(--tail) * var(--display-size));
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
-  padding: clamp(24px, 6vh, 72px) 0 clamp(64px, 10vh, 128px);
-}
-
-/* 404: This page / isn’t / working. */
-.statement {
-  --lead: 3.93;
-  --display-size: min(var(--fit), max(96px, calc((100svh - 380px) / 2.5)));
-}
-
-@supports not (width: 1cqi) {
-  .intro {
-    --w: calc(100vw - 2 * var(--gutter));
-  }
+  align-items: baseline;
+  padding: clamp(56px, 16vh, 184px) 0 clamp(72px, 14vh, 152px);
 }
 
 .intro h1 {
   grid-column: 1 / -1;
-  grid-row: 1;
   font-family: var(--display);
-  font-size: var(--display-size);
+  /* One line that fills the column: "mostlywork.ing" is 6.45em wide. */
+  font-size: min(calc((100vw - 2 * var(--gutter)) / 6.55), 300px);
+  font-size: min(calc(100cqi / 6.55), 300px);
   font-weight: 600;
   line-height: 0.82;
   letter-spacing: -0.05em;
-  overflow-wrap: break-word;
 }
 
-.intro h1 .line {
-  display: block;
+/* On narrow screens one line would be small, so it breaks after "mostly"
+   (at the <wbr>) and "work.ing", 3.68em wide, fills the column. */
+@container (max-width: 520px) {
+  .intro h1 {
+    font-size: calc(100cqi / 3.74);
+    /* Just enough to keep the y of "mostly" off the dot of the i */
+    line-height: 1;
+  }
 }
 
-.intro:not(.statement) h1 .line:last-child {
-  text-align: right;
-  padding-right: var(--overhang);
+/* 404: a sentence, so it wraps naturally at a more modest size */
+.statement h1 {
+  max-width: 14ch;
+  font-size: min(15.2cqi, calc(20px + 9.5cqi), 184px);
+  line-height: 0.82;
+  text-wrap: balance;
 }
 
 .lede {
-  grid-column: 1 / -1;
-  max-width: 34em;
-  margin-top: clamp(24px, 4vw, 40px);
+  grid-column: 1 / span 6;
+  margin-top: clamp(24px, 4vw, 48px);
   text-wrap: pretty;
 }
 
@@ -231,46 +199,75 @@ a {
   text-decoration-thickness: 2px;
 }
 
-@media (min-width: 700px) {
-  .intro:not(.statement) {
-    /* Small enough that the steps clear each other: the tail of the y
-       passes over "wo", never into the k. */
-    --display-size: min(23.5cqi, max(96px, calc((100svh - 260px) / 2.5)));
-  }
+/* Homepage: main is the grid. The intro's children join it, so the
+   contact block (after the projects in the HTML) can sit beside the lede
+   on wider screens and follow the projects on phones. */
 
-  /* work: inks halfway between where "mostly" and ".ing" start */
-  .intro:not(.statement) h1 .line:nth-child(2) {
-    margin-left: calc(50% - 0.78em);
-  }
-
-  /* The lede sits left of ".ing", sharing its baseline */
-  .intro:not(.statement) h1,
-  .intro:not(.statement) .lede {
-    grid-row: 1;
-    align-self: last baseline;
-  }
-
-  .intro:not(.statement) .lede {
-    grid-column: 1 / span 6;
-    max-width: min(28em, calc(var(--step) - 48px));
-    margin: 0;
-  }
+.homepage {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: baseline;
+  align-content: start;
+  padding-top: clamp(56px, 16vh, 184px);
 }
 
-.intro h1 .line {
+.homepage > .intro {
+  display: contents;
+  /* main is the size container here, not the intro */
+  container-type: normal;
+}
+
+.homepage .contact {
+  grid-row: 2;
+}
+
+.homepage > .projects {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  align-self: start;
+  margin-top: clamp(72px, 14vh, 152px);
+}
+
+/* Contact */
+
+.contact {
+  grid-column: 9 / -1;
+  margin-top: clamp(24px, 4vw, 48px);
+  font-style: normal;
+}
+
+.contact dl,
+.contact dd {
+  margin: 0;
+}
+
+.contact dd + dt {
+  margin-top: 1.3em;
+}
+
+.contact a {
+  text-decoration: none;
+}
+
+.contact a:hover,
+.contact a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.intro > * {
   animation: rise 0.9s var(--ease-out) backwards;
 }
 
-.intro h1 .line:nth-child(2) {
+.intro > :nth-child(2) {
   animation-delay: 0.08s;
 }
 
-.intro h1 .line:nth-child(3) {
+.intro > :nth-child(3) {
   animation-delay: 0.16s;
-}
-
-.intro .lede {
-  animation: rise 0.9s var(--ease-out) 0.24s backwards;
 }
 
 /* Projects */
@@ -364,93 +361,14 @@ a {
   transform: translate(3px, -3px);
 }
 
-/* Colophon: the contact details, kept to the end of the page, then the
-   copyright line.
-
-   Phones: a two-column list, labels on the left.
-   Wide screens: on the projects grid, the contact details under the
-   project names, Instagram under the descriptions, the copyright line
-   under the web addresses. */
+/* Colophon */
 
 .colophon {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: last baseline;
-  gap: 32px 24px;
-  padding: 0 0 28px;
-}
-
-.contact {
-  font-style: normal;
-}
-
-.contact dl {
-  display: grid;
-  grid-template-columns: max-content max-content;
-  column-gap: 0.6em;
-  align-items: baseline;
-  margin: 0;
-}
-
-.contact dl > div {
-  display: contents;
-}
-
-.contact dt {
-  grid-column: 1;
-}
-
-.contact dd {
-  grid-column: 2;
-  margin: 0;
-}
-
-.contact dd + dt,
-.contact div + div > dt {
-  margin-top: 1.3em;
-}
-
-.contact a {
-  text-decoration: none;
-}
-
-.contact a:hover,
-.contact a:focus-visible {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
-}
-
-@media (min-width: 861px) {
-  .colophon {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    align-items: first baseline;
-    column-gap: 24px;
-  }
-
-  .contact {
-    grid-column: 2 / span 8;
-  }
-
-  .contact dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 24px;
-  }
-
-  .contact dl > div {
-    display: block;
-  }
-
-  .contact div + div > dt {
-    margin-top: 0;
-  }
-
-  .copyright {
-    grid-column: 10 / -1;
-    justify-self: end;
-  }
+  gap: 8px 24px;
+  padding: 24px 0 28px;
 }
 
 /* Small screens */
@@ -458,6 +376,30 @@ a {
 @media (max-width: 860px) {
   :root {
     --bleed: 8px;
+  }
+
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .homepage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lede,
+  .contact {
+    grid-column: 1 / -1;
+  }
+
+  /* Phones: the contact block follows the projects */
+  .homepage .contact,
+  .homepage > .projects {
+    grid-row: auto;
+  }
+
+  .homepage .contact {
+    margin-top: 0;
+    padding-bottom: 24px;
   }
 
   .project {
