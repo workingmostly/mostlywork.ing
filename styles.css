@@ -179,6 +179,17 @@ a {
   text-wrap: pretty;
 }
 
+/* Homepage lede: one sentence per line, and the first never wraps */
+
+.lede-fit {
+  grid-column: 1 / span 8;
+  max-width: none;
+}
+
+.lede-fit > span {
+  display: block;
+}
+
 .lede a {
   color: var(--ink);
   text-decoration-thickness: 1px;
@@ -357,6 +368,11 @@ a {
 
   .contact {
     margin-top: 32px;
+  }
+
+  /* The first sentence is 22.7em wide: size it to fit the column. */
+  .lede-fit {
+    font-size: clamp(14px, 4.3cqi, 20px);
   }
 
   .project {
