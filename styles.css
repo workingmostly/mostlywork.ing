@@ -158,19 +158,19 @@ a {
 .intro h1 {
   grid-column: 1 / -1;
   font-family: var(--display);
-  /* One line that fills the column: "mostlywork.ing" is 6.45em wide. */
-  font-size: min(calc((100vw - 2 * var(--gutter)) / 6.55), 300px);
-  font-size: min(calc(100cqi / 6.55), 300px);
+  /* One line that fills the column: "mostlywork.ing" is 6.59em wide. */
+  font-size: min(calc((100vw - 2 * var(--gutter)) / 6.69), 300px);
+  font-size: min(calc(100cqi / 6.69), 300px);
   font-weight: 600;
   line-height: 0.82;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
 }
 
 /* On narrow screens one line would be small, so it breaks after "mostly"
-   (at the <wbr>) and "work.ing", 3.68em wide, fills the column. */
+   (at the <wbr>) and "work.ing", 3.76em wide, fills the column. */
 @container (max-width: 520px) {
   .intro h1 {
-    font-size: calc(100cqi / 3.74);
+    font-size: calc(100cqi / 3.82);
     /* Just enough to keep the y of "mostly" off the dot of the i */
     line-height: 1;
   }
