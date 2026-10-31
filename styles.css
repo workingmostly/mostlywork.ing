@@ -19,6 +19,14 @@
 }
 
 @font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-italic-trial.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "DM Mono";
   src: url("/fonts/dm-mono.woff2") format("woff2");
   font-weight: 400;
@@ -305,10 +313,11 @@ a {
 
 .project-name {
   font-family: var(--display);
-  font-size: clamp(32px, 4.4vw, 64px);
-  font-weight: 700;
+  font-size: clamp(36px, 5vw, 76px);
+  font-style: italic;
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
   grid-column: span 4;
 }
 
