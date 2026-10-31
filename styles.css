@@ -178,17 +178,6 @@ a {
   text-wrap: pretty;
 }
 
-/* Homepage lede: one sentence per line, and the first never wraps */
-
-.lede-fit {
-  grid-column: 1 / span 8;
-  max-width: none;
-}
-
-.lede-fit > span {
-  display: block;
-}
-
 .lede a {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.15em;
@@ -357,12 +346,6 @@ a {
 
   .contact {
     margin-top: 32px;
-  }
-
-  /* The lede's first sentence is 20.8em wide and must not wrap, so Body
-     text scales with the column (4.7% of its width) on small screens. */
-  :root {
-    --body-size: clamp(14px, calc((100vw - 2 * var(--gutter)) * 0.047), 18px);
   }
 
   .project {
