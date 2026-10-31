@@ -151,6 +151,8 @@ a {
   width: auto;
   aspect-ratio: 482 / 502;
   fill: currentColor;
+  /* Rises in with the heading it sits on, first thing on load */
+  animation: rise 0.9s var(--ease-out) backwards;
 }
 
 /* Intro */
