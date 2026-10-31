@@ -304,14 +304,23 @@ a {
 .project-url {
   display: flex;
   align-items: baseline;
-  gap: 0.5em;
+  gap: 0.3em;
   grid-column: span 3;
   justify-self: end;
   white-space: nowrap;
 }
 
+/* ↗ drawn to Instrument Sans's metrics: 0.72em cap height, 0.08em stems.
+   It sits on the baseline, so it lines up with the text on every device
+   (the font has no ↗ glyph, so a text arrow would come from a fallback). */
 .arrow {
-  display: inline-block;
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  overflow: visible;
   transition: transform 0.4s var(--ease-out);
 }
 
@@ -350,10 +359,10 @@ a {
     margin-top: 32px;
   }
 
-  /* The lede's first sentence is 22.7em wide and must not wrap, so Body
-     text scales with the column (4.3% of its width) on small screens. */
+  /* The lede's first sentence is 20.8em wide and must not wrap, so Body
+     text scales with the column (4.7% of its width) on small screens. */
   :root {
-    --body-size: clamp(14px, calc((100vw - 2 * var(--gutter)) * 0.043), 18px);
+    --body-size: clamp(14px, calc((100vw - 2 * var(--gutter)) * 0.047), 18px);
   }
 
   .project {
