@@ -280,19 +280,49 @@ a {
 
 .projects h2 {
   padding-bottom: 14px;
+  animation: rise 0.9s var(--ease-out) 0.16s backwards;
 }
 
+/* The rules are drawn with pseudo-elements rather than borders so they
+   can draw in from the left on load, each just after its row rises. */
+
 .index {
+  position: relative;
   list-style: none;
   margin: 0 calc(-1 * var(--bleed));
-  padding: 0;
-  border-top: 1px solid var(--ink);
+  padding: 1px 0 0;
 }
 
 .index li {
-  border-bottom: 1px solid var(--ink);
+  position: relative;
+  padding-bottom: 1px;
+}
+
+.index::before,
+.index li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  animation: draw 1.1s var(--ease-out) backwards;
+}
+
+.index::before {
+  top: 0;
+  animation-delay: 0.2s;
+}
+
+.index li::after {
+  bottom: 0;
+  animation-delay: calc(0.3s + var(--i, 0) * 0.08s);
+}
+
+.project {
   animation: rise 0.9s var(--ease-out) backwards;
-  animation-delay: calc(0.16s + var(--i, 0) * 0.07s);
+  animation-delay: calc(0.24s + var(--i, 0) * 0.08s);
 }
 
 .project {
@@ -437,6 +467,12 @@ a {
   from {
     opacity: 0;
     transform: translateY(16px);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
   }
 }
 
