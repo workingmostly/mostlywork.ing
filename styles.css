@@ -39,12 +39,14 @@
 
   --paper: #ffffff;
   --ink: #141413;
-  --ink-soft: #5b5954;
 
-  /* Headings. Characters the display face lacks (e.g. ’) fall back to the sans. */
+  /* Characters the display face lacks (e.g. ’) fall back to the sans. */
   --display: "TRJN DaVinci", var(--sans);
   --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --body-size: clamp(18px, 1.6vw, 22px);
+  --small-size: 14px;
 
   --gutter: clamp(16px, 4vw, 48px);
   --bleed: 12px;
@@ -72,8 +74,9 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 18px;
-  line-height: 1.45;
+  font-size: var(--body-size);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-kerning: normal;
@@ -116,11 +119,19 @@ a {
   border: 0;
 }
 
-/* Small mono labels */
+/*
+  Type: four styles, used everywhere, all in ink.
+  1. Display  TRJN DaVinci Semibold  the page heading       (.intro h1)
+  2. Title    TRJN DaVinci Italic    project names          (.project-name)
+  3. Body     Instrument Sans        everything people read (body)
+  4. Small    DM Mono                labels, numbers, web addresses, footer
+*/
 
-.label {
+.label,
+.project-num,
+.project-url {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--small-size);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0;
@@ -153,8 +164,6 @@ a {
 /* Intro */
 
 .intro {
-  /* Shared by the lede and the contact block, which sit side by side */
-  --info-size: clamp(18px, 1.6vw, 22px);
   container-type: inline-size;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -183,10 +192,6 @@ a {
   grid-column: 1 / span 6;
   max-width: 30ch;
   margin-top: clamp(24px, 4vw, 48px);
-  font-size: var(--info-size);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: var(--ink);
   text-wrap: pretty;
 }
 
@@ -202,7 +207,6 @@ a {
 }
 
 .lede a {
-  color: var(--ink);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.15em;
 }
@@ -216,10 +220,7 @@ a {
 .contact {
   grid-column: 9 / -1;
   margin-top: clamp(24px, 4vw, 48px);
-  font-size: var(--info-size);
   font-style: normal;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
 }
 
 .contact dl,
@@ -298,17 +299,8 @@ a {
   outline-offset: -6px;
 }
 
-.project-num,
-.project-url {
-  font-family: var(--mono);
-  font-size: 14px;
-  letter-spacing: 0.01em;
-}
-
 .project-num {
   grid-column: span 1;
-  color: var(--ink-soft);
-  transition: color 0.25s var(--ease-out);
 }
 
 .project-name {
@@ -323,8 +315,6 @@ a {
 
 .project-desc {
   grid-column: span 4;
-  color: var(--ink-soft);
-  transition: color 0.25s var(--ease-out);
   text-wrap: pretty;
 }
 
@@ -347,11 +337,6 @@ a {
   transform: translate(3px, -3px);
 }
 
-.project:hover :is(.project-num, .project-desc),
-.project:focus-visible :is(.project-num, .project-desc) {
-  color: var(--paper);
-}
-
 /* Colophon */
 
 .colophon {
@@ -360,7 +345,6 @@ a {
   justify-content: space-between;
   gap: 8px 24px;
   padding: 24px 0 28px;
-  color: var(--ink-soft);
 }
 
 /* Small screens */
@@ -383,10 +367,10 @@ a {
     margin-top: 32px;
   }
 
-  /* The lede's first sentence is 22.7em wide and must not wrap, so size
-     the lede and contact text to fit the column. */
-  .intro {
-    --info-size: clamp(14px, 4.3cqi, 18px);
+  /* The lede's first sentence is 22.7em wide and must not wrap, so Body
+     text scales with the column (4.3% of its width) on small screens. */
+  :root {
+    --body-size: clamp(14px, calc((100vw - 2 * var(--gutter)) * 0.043), 18px);
   }
 
   .project {
