@@ -7,7 +7,7 @@ A static site with no build step, served by Vercel from the repository root.
 - `styles.css`, `site.js`: shared by both pages (`site.js` runs the Bristol clock and spins the ✱)
 - `fonts/`: self-hosted [Instrument Sans](https://github.com/Instrument/instrument-sans) and [DM Mono](https://github.com/googlefonts/dm-mono), both under the SIL Open Font License
 - `og.png`: the link preview image (1200×630), a render of the homepage's headline
-- `apple-touch-icon.png`, `favicon.*`: icons, all drawn from the same ✱ geometry
+- `apple-touch-icon.png`, `favicon.*`: icons
 
 To preview locally, run a static server from the repository root, for example:
 

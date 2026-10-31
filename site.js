@@ -21,13 +21,13 @@ if (clocks.length) {
   setInterval(tick, 10000);
 }
 
-// The ✱ has six-fold symmetry, so turning it by 60° lands it exactly where it
-// started: it moves, and nothing changes. Mostly working.
+// Give the ✱ a full turn on hover or tap. A whole turn always lands it exactly
+// where it started, however the glyph sits in its font's em box.
 for (const footnote of document.querySelectorAll(".footnote")) {
   let turns = 0;
   const spin = () => {
     turns += 1;
-    footnote.style.setProperty("--turn", `${turns * 60}deg`);
+    footnote.style.setProperty("--turn", `${turns * 360}deg`);
   };
   footnote.addEventListener("pointerenter", spin);
   footnote.addEventListener("click", spin);
