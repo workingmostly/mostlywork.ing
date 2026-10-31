@@ -12,8 +12,8 @@
 /* TRIAL licence only: replace with licensed files before this goes live. */
 @font-face {
   font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-heavy-trial.woff2") format("woff2");
-  font-weight: 900;
+  src: url("/fonts/trjn-davinci-bold-trial.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -108,17 +108,6 @@ a {
   border: 0;
 }
 
-/* The ✱ mark: the real character, in the same font stack the site has always used */
-
-.mark {
-  display: inline-block;
-  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
 /* Small mono labels */
 
 .label {
@@ -143,14 +132,21 @@ a {
   display: block;
   margin: -6px;
   padding: 6px;
-  font-size: 32px;
-  line-height: 1;
-  text-decoration: none;
+}
+
+/* The ✱ logo (482 × 502) */
+.logo {
+  display: block;
+  width: 27px;
+  height: 28px;
+  fill: currentColor;
 }
 
 /* Intro */
 
 .intro {
+  /* Shared by the lede and the contact block, which sit side by side */
+  --info-size: clamp(18px, 1.6vw, 22px);
   container-type: inline-size;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -164,7 +160,7 @@ a {
   font-family: var(--display);
   font-size: clamp(40px, 11vw, 184px);
   font-size: clamp(40px, 11cqi, 184px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 0.82;
   letter-spacing: -0.05em;
   text-wrap: balance;
@@ -179,10 +175,10 @@ a {
   grid-column: 1 / span 6;
   max-width: 30ch;
   margin-top: clamp(24px, 4vw, 48px);
-  font-size: clamp(20px, 2vw, 28px);
-  line-height: 1.25;
+  font-size: var(--info-size);
+  line-height: 1.3;
   letter-spacing: -0.01em;
-  color: var(--ink-soft);
+  color: var(--ink);
   text-wrap: pretty;
 }
 
@@ -212,9 +208,10 @@ a {
 .contact {
   grid-column: 9 / -1;
   margin-top: clamp(24px, 4vw, 48px);
-  font-size: clamp(17px, 1.4vw, 20px);
+  font-size: var(--info-size);
   font-style: normal;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .contact dl,
@@ -309,7 +306,7 @@ a {
 .project-name {
   font-family: var(--display);
   font-size: clamp(32px, 4.4vw, 64px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.05em;
   grid-column: span 4;
@@ -377,9 +374,10 @@ a {
     margin-top: 32px;
   }
 
-  /* The first sentence is 22.7em wide: size it to fit the column. */
-  .lede-fit {
-    font-size: clamp(14px, 4.3cqi, 20px);
+  /* The lede's first sentence is 22.7em wide and must not wrap, so size
+     the lede and contact text to fit the column. */
+  .intro {
+    --info-size: clamp(14px, 4.3cqi, 18px);
   }
 
   .project {
