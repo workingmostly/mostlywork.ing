@@ -40,6 +40,12 @@
 
   --gutter: clamp(16px, 4vw, 48px);
   --bleed: 12px;
+
+  /* Space under the ✱ logo, in proportion to the heading below it. On one
+     line (the heading's size is about the content width / 6.55) its
+     ascenders rise about 0.11em above the line box, so the gap allows for
+     that plus about 0.1em of clear space. */
+  --logo-gap: calc(min((100vw - 2 * var(--gutter)) / 6.55, 300px) * 0.21);
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -122,12 +128,14 @@ a {
 
 /* Masthead */
 
+/* The page's top space sits above the logo, so the ✱ rests just over
+   the heading. */
 .masthead {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 24px 0;
+  padding: clamp(56px, 16vh, 184px) 0 var(--logo-gap, 24px);
 }
 
 .home {
@@ -139,8 +147,9 @@ a {
 /* The ✱ logo (482 × 502) */
 .logo {
   display: block;
-  width: 27px;
-  height: 28px;
+  height: clamp(40px, 4.5vw, 72px);
+  width: auto;
+  aspect-ratio: 482 / 502;
   fill: currentColor;
 }
 
@@ -152,7 +161,7 @@ a {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
   align-items: baseline;
-  padding: clamp(56px, 16vh, 184px) 0 clamp(72px, 14vh, 152px);
+  padding: 0 0 clamp(72px, 14vh, 152px);
 }
 
 .intro h1 {
@@ -185,7 +194,9 @@ a {
 }
 
 .lede {
-  grid-column: 1 / span 6;
+  /* Eight columns: room for the lede on one line on desktop, stopping
+     just short of the contact block at column 9. */
+  grid-column: 1 / span 8;
   margin-top: clamp(24px, 4vw, 48px);
   text-wrap: pretty;
 }
@@ -210,7 +221,6 @@ a {
   column-gap: 24px;
   align-items: baseline;
   align-content: start;
-  padding-top: clamp(56px, 16vh, 184px);
 }
 
 .homepage > .intro {
@@ -308,6 +318,7 @@ a {
   background: var(--ink);
   transform-origin: 0 50%;
   animation: draw 1.1s var(--ease-out) backwards;
+  pointer-events: none;
 }
 
 .index::before {
@@ -320,7 +331,11 @@ a {
   animation-delay: calc(0.3s + var(--i, 0) * 0.08s);
 }
 
+/* Each row's link reaches 1px down under its rule (which lets the pointer
+   through), so neighbouring rows touch: moving between them never passes
+   over a gap where neither is hovered, which made the fill flicker. */
 .project {
+  margin-bottom: -1px;
   animation: rise 0.9s var(--ease-out) backwards;
   animation-delay: calc(0.24s + var(--i, 0) * 0.08s);
 }
@@ -330,15 +345,27 @@ a {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: baseline;
   column-gap: 24px;
-  padding: clamp(18px, 2.4vw, 30px) var(--bleed);
+  padding: clamp(18px, 2.4vw, 30px) var(--bleed) calc(clamp(18px, 2.4vw, 30px) + 1px);
   text-decoration: none;
   transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
 }
 
-.project:hover,
 .project:focus-visible {
   background: var(--ink);
   color: var(--paper);
+}
+
+/* Only on devices that really hover, so a tapped row on a phone doesn't
+   stay stuck in its hover state. */
+@media (hover: hover) {
+  .project:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .project:hover .arrow {
+    transform: translate(3px, -3px);
+  }
 }
 
 .project:focus-visible {
@@ -388,7 +415,6 @@ a {
   transition: transform 0.4s var(--ease-out);
 }
 
-.project:hover .arrow,
 .project:focus-visible .arrow {
   transform: translate(3px, -3px);
 }
@@ -401,6 +427,15 @@ a {
   justify-content: space-between;
   gap: 8px 24px;
   padding: 24px 0 28px;
+}
+
+/* Two-line heading (content under 520px wide, so viewport under ~565px):
+   size the logo gap from that larger size. Its line height is 1, so the
+   ascenders barely overhang. */
+@media (max-width: 565px) {
+  :root {
+    --logo-gap: calc((100vw - 2 * var(--gutter)) / 3.74 * 0.16);
+  }
 }
 
 /* Small screens */
