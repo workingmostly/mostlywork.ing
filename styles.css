@@ -337,6 +337,7 @@ a {
    through), so neighbouring rows touch: moving between them never passes
    over a gap where neither is hovered, which made the fill flicker. */
 .project {
+  position: relative;
   margin-bottom: -1px;
 }
 
@@ -362,8 +363,19 @@ a {
    stay stuck in its hover state. */
 @media (hover: hover) {
   .project:hover {
+    z-index: 1;
     background: var(--ink);
     color: var(--paper);
+  }
+
+  /* Hysteresis: while a row is hovered, its hover area reaches 8px into its
+     neighbours (invisibly), so a cursor wobbling across the boundary stays
+     with the current row instead of flipping between the two. The next row
+     takes over once the cursor is clearly inside it. */
+  .project:hover::before {
+    content: "";
+    position: absolute;
+    inset: -8px 0;
   }
 
   .project:hover .arrow {
