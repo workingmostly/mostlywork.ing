@@ -356,16 +356,19 @@ a {
   column-gap: 24px;
   padding: clamp(18px, 2.4vw, 30px) var(--bleed) calc(clamp(18px, 2.4vw, 30px) + 1px);
   text-decoration: none;
-  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
 }
 
 /* Only on devices that really hover, so a tapped row on a phone doesn't
    stay stuck in its hover state. */
 @media (hover: hover) {
+  /* The fill fades in, but drops instantly when the pointer leaves (the
+     transition only lives on :hover), so only one row ever shows any fill:
+     no moment where two half-grey rows make it unclear which is active. */
   .project:hover {
     z-index: 1;
     background: var(--ink);
     color: var(--paper);
+    transition: background-color 0.18s var(--ease-out), color 0.18s var(--ease-out);
   }
 
   /* Hysteresis: while a row is hovered, its hover area reaches 8px into its
