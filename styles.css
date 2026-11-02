@@ -337,7 +337,6 @@ a {
    through), so neighbouring rows touch: moving between them never passes
    over a gap where neither is hovered, which made the fill flicker. */
 .project {
-  position: relative;
   margin-bottom: -1px;
 }
 
@@ -358,27 +357,14 @@ a {
   text-decoration: none;
 }
 
-/* Only on devices that really hover, so a tapped row on a phone doesn't
-   stay stuck in its hover state. */
+/* Hover is a plain instant switch. Nothing about the hovered state moves,
+   fades or changes the row's shape, so there is no half-state, no restarted
+   fade and no hover-dependent hit-testing that could flicker. Only on
+   devices that really hover, so a tapped row on a phone doesn't stick. */
 @media (hover: hover) {
-  /* The fill fades in, but drops instantly when the pointer leaves (the
-     transition only lives on :hover), so only one row ever shows any fill:
-     no moment where two half-grey rows make it unclear which is active. */
   .project:hover {
-    z-index: 1;
     background: var(--ink);
     color: var(--paper);
-    transition: background-color 0.18s var(--ease-out), color 0.18s var(--ease-out);
-  }
-
-  /* Hysteresis: while a row is hovered, its hover area reaches 8px into its
-     neighbours (invisibly), so a cursor wobbling across the boundary stays
-     with the current row instead of flipping between the two. The next row
-     takes over once the cursor is clearly inside it. */
-  .project:hover::before {
-    content: "";
-    position: absolute;
-    inset: -8px 0;
   }
 
   .project:hover .arrow {
@@ -433,7 +419,6 @@ a {
   stroke: currentColor;
   stroke-width: 8;
   overflow: visible;
-  transition: transform 0.4s var(--ease-out);
 }
 
 .project:focus-visible .arrow {
