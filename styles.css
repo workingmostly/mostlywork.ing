@@ -183,16 +183,33 @@ a {
 .k-in { letter-spacing: -0.03em; }
 .k-ng { letter-spacing: -0.012em; }
 
-/* On narrow screens one line would be small, so it breaks after "mostly"
-   (at the <wbr>) and "work.ing", 4.06em wide, fills the column. */
+/* On narrow screens one line would be small, so the name stacks as
+   "mostly" over "work.ing" (two block spans), each sized to fill the column ("mostly"
+   is 3.22em wide, "work.ing" 4.07em). With both lines full width the y of
+   "mostly" sits over the n, and the dot of the i under the t, so the
+   stack can be tight without the tail of the y meeting the dot. */
 @container (max-width: 520px) {
   .intro h1 {
     font-size: calc(100cqi / 4.12);
-    /* The y of "mostly" hangs 0.21em and the dot of the i below it rises
-       0.78em, so 1.08 leaves them 0.09em apart: clear, but still tight. */
-    line-height: 1.08;
-    /* At this line height the tails hang only 0.035em below the box */
-    padding-bottom: 0.035em;
+    line-height: 1;
+    /* The g's tail hangs 0.075em below the second line's box */
+    padding-bottom: 0.075em;
+  }
+
+  .intro h1 .l1,
+  .intro h1 .l2 {
+    display: block;
+  }
+
+  .intro h1 .l1 {
+    font-size: calc(100cqi / 3.27);
+  }
+
+  .intro h1 .l2 {
+    /* Pulls the second line up until its tallest ink (the dot of the i)
+       sits 0.1em under the first line's baseline letters, and the y's
+       tail 0.1em above the n. */
+    margin-top: -0.125em;
   }
 }
 
