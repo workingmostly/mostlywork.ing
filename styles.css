@@ -188,10 +188,11 @@ a {
 @container (max-width: 520px) {
   .intro h1 {
     font-size: calc(100cqi / 4.12);
-    /* Just enough to keep the y of "mostly" off the dot of the i */
-    line-height: 1;
-    /* At line-height 1 the tails hang only 0.085em below the box */
-    padding-bottom: 0.085em;
+    /* The y of "mostly" hangs 0.21em and the dot of the i below it rises
+       0.78em, so 1.08 leaves them 0.09em apart: clear, but still tight. */
+    line-height: 1.08;
+    /* At this line height the tails hang only 0.035em below the box */
+    padding-bottom: 0.035em;
   }
 }
 
@@ -448,7 +449,9 @@ a {
    ascenders barely overhang. */
 @media (max-width: 565px) {
   :root {
-    --logo-gap: calc((100vw - 2 * var(--gutter)) / 4.12 * 0.017);
+    /* The two-line stack's line box already holds 0.12em of air above
+       its tallest ink, so the logo needs no extra gap. */
+    --logo-gap: 0px;
   }
 
   /* The 404's heading is smaller and single-spaced, so it needs its own gap */
