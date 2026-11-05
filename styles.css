@@ -9,20 +9,11 @@
   font-display: swap;
 }
 
-/* TRIAL licence only: replace with licensed files before this goes live. */
 @font-face {
-  font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-semibold-trial.woff2") format("woff2");
-  font-weight: 600;
+  font-family: "Inter Tight";
+  src: url("/fonts/inter-tight.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-italic-trial.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
   font-display: swap;
 }
 
@@ -32,8 +23,7 @@
   --paper: #ffffff;
   --ink: #141413;
 
-  /* Characters the display face lacks (e.g. ’) fall back to the sans. */
-  --display: "TRJN DaVinci", var(--sans);
+  --display: "Inter Tight", var(--sans);
   --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --body-size: clamp(18px, 1.6vw, 22px);
@@ -41,11 +31,10 @@
   --gutter: clamp(16px, 4vw, 48px);
   --bleed: 12px;
 
-  /* Space under the ✱ logo, in proportion to the heading below it. On one
-     line (the heading's size is about the content width / 6.55) its
-     ascenders rise about 0.11em above the line box, so the gap allows for
-     that plus about 0.1em of clear space. */
-  --logo-gap: calc(min((100vw - 2 * var(--gutter)) / 6.55, 300px) * 0.21);
+  /* Space under the ✱ logo, in proportion to the heading below it (whose
+     size is about the content width / 7.45 on one line), so that there is
+     about 0.1em of clear space above the heading's tallest ink. */
+  --logo-gap: calc(min((100vw - 2 * var(--gutter)) / 7.4, 300px) * 0.107);
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -121,8 +110,8 @@ a {
 
 /*
   Type: three styles, used everywhere, all in ink.
-  1. Display  TRJN DaVinci Semibold  the page heading  (.intro h1)
-  2. Title    TRJN DaVinci Italic    project names     (.project-name)
+  1. Display  Inter Tight ExtraBold  the page heading  (.intro h1)
+  2. Title    Inter Tight Medium     product names     (.project-name)
   3. Body     Instrument Sans        everything else   (body)
 */
 
@@ -169,19 +158,32 @@ a {
 .intro h1 {
   grid-column: 1 / -1;
   font-family: var(--display);
-  /* One line that fills the column: "mostlywork.ing" is 6.45em wide. */
-  font-size: min(calc((100vw - 2 * var(--gutter)) / 6.55), 300px);
-  font-size: min(calc(100cqi / 6.55), 300px);
-  font-weight: 600;
+  /* One line that fills the column: "mostlywork.ing" is 7.29em wide. */
+  font-size: min(calc((100vw - 2 * var(--gutter)) / 7.4), 300px);
+  font-size: min(calc(100cqi / 7.4), 300px);
+  font-weight: 800;
   line-height: 0.82;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
 }
 
+/* Hand kerning for the name. Inter Tight's own spacing of these pairs is
+   uneven at this size (y|w touches; the second half of the word is looser
+   than the first), so a few letters adjust the gap after them. Measured on
+   the rendered page, every gap now sits in a narrow band. */
+.k-mo { letter-spacing: -0.015em; }
+.k-tl { letter-spacing: -0.01em; }
+.k-yw { letter-spacing: 0.03em; }
+.k-or { letter-spacing: -0.012em; }
+.k-k { letter-spacing: -0.01em; }
+.k-dot { letter-spacing: -0.055em; }
+.k-in { letter-spacing: -0.03em; }
+.k-ng { letter-spacing: -0.012em; }
+
 /* On narrow screens one line would be small, so it breaks after "mostly"
-   (at the <wbr>) and "work.ing", 3.68em wide, fills the column. */
+   (at the <wbr>) and "work.ing", 4.06em wide, fills the column. */
 @container (max-width: 520px) {
   .intro h1 {
-    font-size: calc(100cqi / 3.74);
+    font-size: calc(100cqi / 4.12);
     /* Just enough to keep the y of "mostly" off the dot of the i */
     line-height: 1;
   }
@@ -387,10 +389,9 @@ a {
 .project-name {
   font-family: var(--display);
   font-size: clamp(36px, 5vw, 76px);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.015em;
   grid-column: span 4;
 }
 
@@ -440,7 +441,12 @@ a {
    ascenders barely overhang. */
 @media (max-width: 565px) {
   :root {
-    --logo-gap: calc((100vw - 2 * var(--gutter)) / 3.74 * 0.16);
+    --logo-gap: calc((100vw - 2 * var(--gutter)) / 4.12 * 0.017);
+  }
+
+  /* The 404's heading is smaller and single-spaced, so it needs its own gap */
+  body:has(.statement) {
+    --logo-gap: calc((100vw - 2 * var(--gutter)) * 0.0163);
   }
 }
 
