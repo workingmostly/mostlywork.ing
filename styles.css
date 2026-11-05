@@ -164,6 +164,10 @@ a {
   font-weight: 800;
   line-height: 0.82;
   letter-spacing: 0;
+  /* The tight line box ends above the y and g tails, which hang about
+     0.175em below it. Pad for them so what follows is spaced from the
+     tails, not the box (at 0.82 the tails sit 0.175em below the box). */
+  padding-bottom: 0.175em;
 }
 
 /* Hand kerning for the name. Inter Tight's own spacing of these pairs is
@@ -186,6 +190,8 @@ a {
     font-size: calc(100cqi / 4.12);
     /* Just enough to keep the y of "mostly" off the dot of the i */
     line-height: 1;
+    /* At line-height 1 the tails hang only 0.085em below the box */
+    padding-bottom: 0.085em;
   }
 }
 
@@ -194,6 +200,7 @@ a {
   max-width: 14ch;
   font-size: min(15.2cqi, calc(20px + 9.5cqi), 184px);
   line-height: 0.82;
+  padding-bottom: 0.175em;
   text-wrap: balance;
 }
 
