@@ -39,8 +39,8 @@
 :root {
   color-scheme: dark;
 
-  --mat: #2d5c96;
-  --line: #dcebff;
+  --mat: #0a4ccc;
+  --line: #d6e6ff;
   --chalk: #ffffff;
 
   /* Characters the display face lacks (e.g. ’) fall back to the sans. */
@@ -116,18 +116,80 @@ body {
   font-kerning: normal;
 }
 
-/* Wear on the mat: grain, specks and fine scratches, plus a little light
-   catching the top corner. It lies over the grid and the panels but under
-   their text, so the type stays crisp, and lets the pointer through. */
+/* Light through a window: soft bands of light and shade fall across the
+   mat and drift slowly, with a couple of pools of brighter light. They're
+   fixed to the screen, so the mat slides under them as the page scrolls.
+   They lie over the grid and the panels but under the text. At their
+   brightest, white text still has 4.5:1 contrast. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10vmax;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(42vmax 26vmax at 72% 28%, rgb(30 145 255 / 0.06), transparent 70%),
+    radial-gradient(36vmax 24vmax at 18% 78%, rgb(30 145 255 / 0.06), transparent 70%),
+    repeating-linear-gradient(150deg,
+        rgb(0 28 120 / 0.000) 1vmax,
+        rgb(0 28 120 / 0.073) 3.25vmax,
+        rgb(0 28 120 / 0.250) 5.5vmax,
+        rgb(0 28 120 / 0.427) 7.75vmax,
+        rgb(0 28 120 / 0.500) 10vmax,
+        rgb(0 28 120 / 0.427) 12.25vmax,
+        rgb(0 28 120 / 0.250) 14.5vmax,
+        rgb(0 28 120 / 0.073) 16.75vmax,
+        rgb(0 28 120 / 0.000) 19vmax,
+        rgb(20 140 255 / 0.000) 20vmax,
+        rgb(20 140 255 / 0.081) 22.75vmax,
+        rgb(20 140 255 / 0.275) 25.5vmax,
+        rgb(20 140 255 / 0.469) 28.25vmax,
+        rgb(20 140 255 / 0.550) 31vmax,
+        rgb(20 140 255 / 0.469) 33.75vmax,
+        rgb(20 140 255 / 0.275) 36.5vmax,
+        rgb(20 140 255 / 0.081) 39.25vmax,
+        rgb(20 140 255 / 0.000) 42vmax,
+        rgb(0 28 120 / 0.000) 43vmax,
+        rgb(0 28 120 / 0.056) 45vmax,
+        rgb(0 28 120 / 0.190) 47vmax,
+        rgb(0 28 120 / 0.324) 49vmax,
+        rgb(0 28 120 / 0.380) 51vmax,
+        rgb(0 28 120 / 0.324) 53vmax,
+        rgb(0 28 120 / 0.190) 55vmax,
+        rgb(0 28 120 / 0.056) 57vmax,
+        rgb(0 28 120 / 0.000) 59vmax,
+        rgb(20 140 255 / 0.000) 60vmax,
+        rgb(20 140 255 / 0.066) 62vmax,
+        rgb(20 140 255 / 0.225) 64vmax,
+        rgb(20 140 255 / 0.384) 66vmax,
+        rgb(20 140 255 / 0.450) 68vmax,
+        rgb(20 140 255 / 0.384) 70vmax,
+        rgb(20 140 255 / 0.225) 72vmax,
+        rgb(20 140 255 / 0.066) 74vmax,
+        rgb(20 140 255 / 0.000) 76vmax,
+        rgb(0 28 120 / 0.000) 76vmax,
+        rgb(0 28 120 / 0.070) 78.5vmax,
+        rgb(0 28 120 / 0.240) 81vmax,
+        rgb(0 28 120 / 0.410) 83.5vmax,
+        rgb(0 28 120 / 0.480) 86vmax,
+        rgb(0 28 120 / 0.410) 88.5vmax,
+        rgb(0 28 120 / 0.240) 91vmax,
+        rgb(0 28 120 / 0.070) 93.5vmax,
+        rgb(0 28 120 / 0.000) 96vmax);
+  animation: light 24s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* Wear on the mat: grain, specks and fine scratches. It lies over the grid
+   and the panels but under their text, so the type stays crisp, and lets
+   the pointer through. */
 body::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background:
-    radial-gradient(1100px 700px at 0 0, rgb(255 255 255 / 0.07), transparent 70%),
-    url("/mat.svg") 0 0 / 960px 960px;
+  background: url("/mat.svg") 0 0 / 960px 960px;
 }
 
 h1,
@@ -340,6 +402,10 @@ main,
      down a little to look centred in its panel. */
   padding: calc(var(--name-size) * 0.2) var(--pad) 0;
   text-decoration: none;
+  /* Above the light and the wear, so a hovered row is clean white. The
+     rows never overlap, so this doesn't change which one is hovered. */
+  position: relative;
+  z-index: 4;
   --name-size: clamp(34px, calc(var(--cell) * 1.05), 56px);
 }
 
@@ -613,6 +679,20 @@ main,
 
 .colophon p {
   --d: 0.5s;
+}
+
+@keyframes light {
+  0% {
+    transform: translate3d(-1.5vmax, -2.6vmax, 0) rotate(-0.6deg);
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate3d(1.5vmax, 2.6vmax, 0) rotate(0.6deg);
+  }
 }
 
 @keyframes knock {
