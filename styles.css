@@ -116,75 +116,99 @@ body {
   font-kerning: normal;
 }
 
-/* Light through a window falls across the mat: soft bands of light and
-   shade, with a couple of faint pools of brighter light. It's part of the
-   scene, so it scrolls with the mat, and it drifts slowly in place. It lies
-   over the grid and the panels but under the text. At its brightest, white
-   text still has 4.5:1 contrast. The frame clips the drifting layer so its
-   edges never show. */
+/* Light through a window falls across the mat in soft bands of light and
+   shade. Like real light it falls on everything on the board: the mat, its
+   lines, its wear, the panels and the type. Shade multiplies everything
+   darker and light screens it brighter (white stays white). The bands
+   never overlap. Even at the deepest shade and the brightest light, white
+   text keeps at least 4.5:1 contrast.
+
+   It's part of the scene, so it scrolls with the mat. Both layers drift
+   and sway together, and the light and the shade each brighten and dim on
+   their own slow rhythms. The frame clips the drifting layers so their
+   edges never show; it isn't a stacking context, so they blend with the
+   whole page beneath. */
 .light {
   position: absolute;
   inset: 0;
-  z-index: 1;
   overflow: hidden;
   pointer-events: none;
 }
 
-.light::before {
+.light::before,
+.light::after {
   content: "";
   position: absolute;
-  inset: -6vmax;
-  background:
-    radial-gradient(42vmax 26vmax at 72% 32vmax, rgb(30 145 255 / 0.06), transparent 70%),
-    radial-gradient(36vmax 24vmax at 18% 92vmax, rgb(30 145 255 / 0.06), transparent 70%),
-    repeating-linear-gradient(150deg,
-        rgb(0 28 120 / 0.000) 1vmax,
-        rgb(0 28 120 / 0.073) 3.25vmax,
-        rgb(0 28 120 / 0.250) 5.5vmax,
-        rgb(0 28 120 / 0.427) 7.75vmax,
-        rgb(0 28 120 / 0.500) 10vmax,
-        rgb(0 28 120 / 0.427) 12.25vmax,
-        rgb(0 28 120 / 0.250) 14.5vmax,
-        rgb(0 28 120 / 0.073) 16.75vmax,
-        rgb(0 28 120 / 0.000) 19vmax,
-        rgb(20 140 255 / 0.000) 20vmax,
-        rgb(20 140 255 / 0.081) 22.75vmax,
-        rgb(20 140 255 / 0.275) 25.5vmax,
-        rgb(20 140 255 / 0.469) 28.25vmax,
-        rgb(20 140 255 / 0.550) 31vmax,
-        rgb(20 140 255 / 0.469) 33.75vmax,
-        rgb(20 140 255 / 0.275) 36.5vmax,
-        rgb(20 140 255 / 0.081) 39.25vmax,
-        rgb(20 140 255 / 0.000) 42vmax,
-        rgb(0 28 120 / 0.000) 43vmax,
-        rgb(0 28 120 / 0.056) 45vmax,
-        rgb(0 28 120 / 0.190) 47vmax,
-        rgb(0 28 120 / 0.324) 49vmax,
-        rgb(0 28 120 / 0.380) 51vmax,
-        rgb(0 28 120 / 0.324) 53vmax,
-        rgb(0 28 120 / 0.190) 55vmax,
-        rgb(0 28 120 / 0.056) 57vmax,
-        rgb(0 28 120 / 0.000) 59vmax,
-        rgb(20 140 255 / 0.000) 60vmax,
-        rgb(20 140 255 / 0.066) 62vmax,
-        rgb(20 140 255 / 0.225) 64vmax,
-        rgb(20 140 255 / 0.384) 66vmax,
-        rgb(20 140 255 / 0.450) 68vmax,
-        rgb(20 140 255 / 0.384) 70vmax,
-        rgb(20 140 255 / 0.225) 72vmax,
-        rgb(20 140 255 / 0.066) 74vmax,
-        rgb(20 140 255 / 0.000) 76vmax,
-        rgb(0 28 120 / 0.000) 76vmax,
-        rgb(0 28 120 / 0.070) 78.5vmax,
-        rgb(0 28 120 / 0.240) 81vmax,
-        rgb(0 28 120 / 0.410) 83.5vmax,
-        rgb(0 28 120 / 0.480) 86vmax,
-        rgb(0 28 120 / 0.410) 88.5vmax,
-        rgb(0 28 120 / 0.240) 91vmax,
-        rgb(0 28 120 / 0.070) 93.5vmax,
-        rgb(0 28 120 / 0.000) 96vmax);
-  animation: light 24s ease-in-out infinite alternate;
-  will-change: transform, opacity;
+  inset: -9vmax;
+  z-index: 5;
+  will-change: translate, rotate, opacity;
+}
+
+.light::before {
+  mix-blend-mode: multiply;
+  background: repeating-linear-gradient(150deg,
+        rgb(255 255 255) 1vmax,
+        rgb(255 255 255) 1vmax,
+        rgb(245 246 250) 3.25vmax,
+        rgb(220 224 238) 5.5vmax,
+        rgb(194 203 225) 7.75vmax,
+        rgb(184 194 220) 10vmax,
+        rgb(194 203 225) 12.25vmax,
+        rgb(220 224 238) 14.5vmax,
+        rgb(245 246 250) 16.75vmax,
+        rgb(255 255 255) 19vmax,
+        rgb(255 255 255) 43vmax,
+        rgb(248 249 251) 45vmax,
+        rgb(229 233 242) 47vmax,
+        rgb(211 218 233) 49vmax,
+        rgb(204 211 230) 51vmax,
+        rgb(211 218 233) 53vmax,
+        rgb(229 233 242) 55vmax,
+        rgb(248 249 251) 57vmax,
+        rgb(255 255 255) 59vmax,
+        rgb(255 255 255) 76vmax,
+        rgb(245 247 250) 78.5vmax,
+        rgb(221 226 238) 81vmax,
+        rgb(197 206 227) 83.5vmax,
+        rgb(188 197 222) 86vmax,
+        rgb(197 206 227) 88.5vmax,
+        rgb(221 226 238) 91vmax,
+        rgb(245 247 250) 93.5vmax,
+        rgb(255 255 255) 96vmax,
+        rgb(255 255 255) 96vmax);
+  animation:
+    drift 11s ease-in-out infinite alternate,
+    sway 17s ease-in-out infinite alternate,
+    shade 13s ease-in-out infinite alternate;
+}
+
+.light::after {
+  mix-blend-mode: screen;
+  background: repeating-linear-gradient(150deg,
+        rgb(0 0 0) 1vmax,
+        rgb(0 0 0) 20vmax,
+        rgb(1 7 16) 22.75vmax,
+        rgb(5 24 56) 25.5vmax,
+        rgb(9 41 96) 28.25vmax,
+        rgb(10 48 112) 31vmax,
+        rgb(9 41 96) 33.75vmax,
+        rgb(5 24 56) 36.5vmax,
+        rgb(1 7 16) 39.25vmax,
+        rgb(0 0 0) 42vmax,
+        rgb(0 0 0) 60vmax,
+        rgb(1 6 13) 62vmax,
+        rgb(4 19 45) 64vmax,
+        rgb(7 33 76) 66vmax,
+        rgb(8 38 90) 68vmax,
+        rgb(7 33 76) 70vmax,
+        rgb(4 19 45) 72vmax,
+        rgb(1 6 13) 74vmax,
+        rgb(0 0 0) 76vmax,
+        rgb(0 0 0) 96vmax);
+  animation:
+    drift 11s ease-in-out infinite alternate,
+    sway 17s ease-in-out infinite alternate,
+    glow 7s ease-in-out infinite alternate;
 }
 
 /* Wear on the mat: grain, specks and fine scratches. It lies over the grid
@@ -688,17 +712,36 @@ main,
   --d: 0.5s;
 }
 
-@keyframes light {
-  0% {
-    transform: translate3d(-1.5vmax, -2.6vmax, 0) rotate(-0.3deg);
+/* Across the bands (150deg), not along them */
+@keyframes drift {
+  from {
+    translate: -2.9vmax -5vmax;
   }
 
-  50% {
+  to {
+    translate: 2.9vmax 5vmax;
+  }
+}
+
+@keyframes sway {
+  from {
+    rotate: -0.4deg;
+  }
+
+  to {
+    rotate: 0.4deg;
+  }
+}
+
+@keyframes shade {
+  to {
     opacity: 0.8;
   }
+}
 
-  100% {
-    transform: translate3d(1.5vmax, 2.6vmax, 0) rotate(0.3deg);
+@keyframes glow {
+  to {
+    opacity: 0.6;
   }
 }
 
