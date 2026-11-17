@@ -665,7 +665,7 @@ main,
 
 .panel > :not(.project),
 .project > * {
-  animation: rise 1s var(--ease-out) var(--d, 0s) backwards;
+  animation: rise 0.8s var(--ease-out) var(--d, 0s) backwards;
 }
 
 .home {
@@ -736,13 +736,13 @@ main,
   }
 }
 
-/* The blur scales with the type, so body text softens by a few pixels and
-   the heading by more, up to 20px. */
+/* A gentle softness that scales with the type: about 1px for body text,
+   4px for product names, 6px for the heading. */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(16px);
-    filter: blur(min(0.2em, 20px));
+    transform: translateY(8px);
+    filter: blur(min(0.06em, 6px));
   }
 }
 
