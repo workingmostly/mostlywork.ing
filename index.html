@@ -32,10 +32,26 @@
 <link rel="preload" href="/light/glow.webp" as="image" type="image/webp">
 <link rel="preload" href="/light/near.webp" as="image" type="image/webp">
 <link rel="preload" href="/light/far.webp" as="image" type="image/webp">
+<script>
+  // Keeps the window blind down until the light has loaded, so the sun
+  // never pops in partway (see .beam in styles.css). Without this script
+  // the blind goes up on a timer.
+  (function () {
+    var root = document.documentElement;
+    var up = function () { root.classList.remove("blind-down"); };
+    root.classList.add("blind-down");
+    Promise.all(["patch", "glow", "near", "far"].map(function (name) {
+      var img = new Image();
+      img.src = "/light/" + name + ".webp";
+      return img.decode ? img.decode().catch(function () {}) : null;
+    })).then(up, up);
+    setTimeout(up, 4000);
+  })();
+</script>
 </head>
 <body>
-<div class="light" aria-hidden="true"><div class="patch"></div></div>
-<div class="sun" aria-hidden="true"><div class="patch"></div></div>
+<div class="light" aria-hidden="true"><div class="beam"><div class="patch"></div></div></div>
+<div class="sun" aria-hidden="true"><div class="beam"><div class="patch"></div></div></div>
 <header class="masthead">
   <a class="home panel" href="/" aria-label="mostlywork.ing"><svg class="logo" viewBox="0 0 482 502" aria-hidden="true" focusable="false"><path d="M192.482 0H289.518L278.383 250.545H203.617L192.482 0ZM192.482 501.089L203.617 250.545H278.383L289.518 501.089H192.482ZM0 162.257L49.3135 87.4918L259.294 221.116L221.911 279.178L0 162.257ZM482 162.257L260.089 279.178L222.706 221.116L432.686 87.4918L482 162.257ZM482 338.036L432.686 412.802L222.706 279.178L260.089 221.116L482 338.036ZM0 339.627L221.911 222.706L259.294 280.769L49.3135 414.393L0 339.627Z"/></svg></a>
 </header>

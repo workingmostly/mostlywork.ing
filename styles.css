@@ -136,16 +136,17 @@ body {
    scene keeps a minimum size, anchored to the window side. Scene sizes are
    in thousandths of its width.
 
-   On load the room starts overcast (the ambient light is drawn here, so
-   it's there at once), then the sun comes out from behind a cloud: the
-   window's patch of sun, its glow and the leaf shadows fade up together as
-   the type settles. The images are preloaded and small, so they're almost
-   always in by then. The leaves sit on canvases that reach well past the
-   page and fade out before their edges, so swaying never shows an edge. */
+   On load the window's blind is down, so the mat is in room light only
+   (the ambient light is drawn here, so it's there at once). Then the blind
+   is pulled up: its soft-edged shadow sweeps off the mat from the window
+   end, letting in the sun and the leaf shadows with it. A small script in
+   the page holds the blind down until the light images have loaded.
+
+   The leaves sit on canvases that reach well past the page and fade out
+   before their edges, so swaying never shows an edge. */
 .light,
 .sun {
   --scene: max(100cqw, 900px);
-  --sun-in: sun-in 2.2s ease-in-out 0.5s backwards;
   position: absolute;
   inset: 0;
   z-index: 5;
@@ -167,6 +168,23 @@ body {
   background: #000;
 }
 
+/* Everything the sun brings: the patch and the leaf shadows, behind the
+   blind. The blind's edge runs along the window sill, so the mask sweeps
+   across it (252deg), from the window end of the patch (-14.4% along the
+   mask's gradient line) past its far end (94.6%). Its edge softens as it
+   goes, like the window bars' shadows. */
+.beam {
+  position: absolute;
+  inset: 0;
+  mask: linear-gradient(252deg, #000 calc(var(--blind) - var(--blind-soft)), transparent var(--blind))
+    right top / var(--scene) calc(var(--scene) * 1.25) no-repeat;
+  animation: blind 1.5s cubic-bezier(0.5, 0, 0.25, 1) 0.35s backwards;
+}
+
+.blind-down .beam {
+  animation-play-state: paused;
+}
+
 /* The window's patch of sun: warm light over the ambient, and its glow */
 .patch {
   position: absolute;
@@ -175,7 +193,6 @@ body {
   width: var(--scene);
   aspect-ratio: 4 / 5;
   background: 0 0 / 100% 100% no-repeat;
-  animation: var(--sun-in);
 }
 
 .light .patch {
@@ -186,10 +203,8 @@ body {
   background-image: url("/light/glow.webp");
 }
 
-.light::before,
-.light::after,
-.sun::before,
-.sun::after {
+.beam::before,
+.beam::after {
   content: "";
   position: absolute;
   background: 0 0 / 100% 100% no-repeat;
@@ -198,8 +213,7 @@ body {
 
 /* The tree outside: big soft dapples, swaying slowly. Canvas: x -200 to
    1200, y -350 to 1000; it sways about (1100, -125). */
-.light::before,
-.sun::before {
+.beam::before {
   top: calc(var(--scene) * -0.35);
   right: calc(var(--scene) * -0.2);
   width: calc(var(--scene) * 1.4);
@@ -208,14 +222,12 @@ body {
   transform-origin: 92.86% 16.67%;
   animation:
     dapple-sway 11s ease-in-out infinite alternate,
-    dapple-drift 7.3s ease-in-out infinite alternate,
-    var(--sun-in);
+    dapple-drift 7.3s ease-in-out infinite alternate;
 }
 
 /* The plant on the sill: sharper sprigs, swaying and fluttering. Canvas:
    x 350 to 1200, y -300 to 750; it sways about its base at (1040, 40). */
-.light::after,
-.sun::after {
+.beam::after {
   top: calc(var(--scene) * -0.3);
   right: calc(var(--scene) * -0.2);
   width: calc(var(--scene) * 0.85);
@@ -224,13 +236,12 @@ body {
   transform-origin: 81.18% 32.38%;
   animation:
     leaf-sway 4.7s ease-in-out infinite alternate,
-    leaf-flutter 2.9s ease-in-out infinite alternate,
-    var(--sun-in);
+    leaf-flutter 2.9s ease-in-out infinite alternate;
 }
 
 /* In the sun's glow the same leaves are black: they block it */
-.sun::before,
-.sun::after {
+.sun .beam::before,
+.sun .beam::after {
   filter: brightness(0);
 }
 
@@ -732,10 +743,29 @@ main,
   --d: 0.5s;
 }
 
-/* The sun coming out from behind a cloud */
-@keyframes sun-in {
+/* The blind going up. Registered so they animate smoothly; their initial
+   values are the blind fully up, which is what reduced motion shows. */
+@property --blind {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 104%;
+}
+
+@property --blind-soft {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 3%;
+}
+
+@keyframes blind {
   from {
-    opacity: 0;
+    --blind: -15%;
+    --blind-soft: 0.4%;
+  }
+
+  to {
+    --blind: 104%;
+    --blind-soft: 3%;
   }
 }
 
