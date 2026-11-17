@@ -39,7 +39,7 @@
 :root {
   color-scheme: dark;
 
-  --mat: #0a4ccc;
+  --mat: #2858b8;
   --line: #d6e6ff;
   --chalk: #ffffff;
 
@@ -116,99 +116,86 @@ body {
   font-kerning: normal;
 }
 
-/* Light through a window falls across the mat in soft bands of light and
-   shade. Like real light it falls on everything on the board: the mat, its
-   lines, its wear, the panels and the type. Shade multiplies everything
-   darker and light screens it brighter (white stays white). The bands
-   never overlap. Even at the deepest shade and the brightest light, white
-   text keeps at least 4.5:1 contrast.
+/* Light from a window falls across the mat: a patch of warm sun through a
+   six-pane window, whose bar shadows are crisp near the window and soften
+   with distance, and cool ambient light everywhere else, fading away from
+   the window. A plant on the sill and a tree outside cast leaf shadows that
+   sway in the breeze; the window light itself holds still.
 
-   It's part of the scene, so it scrolls with the mat. Both layers drift
-   and sway together, and the light and the shade each brighten and dim on
-   their own slow rhythms. The frame clips the drifting layers so their
-   edges never show; it isn't a stacking context, so they blend with the
-   whole page beneath. */
-.light {
+   Like real light it falls on everything on the board (mat, lines, wear,
+   panels and type): the whole layer multiplies the page. Sunlit areas show
+   the mat's true colour, a touch warm. The leaves composite inside the
+   layer, so a leaf can only take sun down to ambient, never darker. Even in
+   the dimmest ambient light, white text keeps at least 4.5:1 contrast.
+
+   The sun also lifts the mat a little where it falls (a screen layer, cut
+   by the same leaves), so sunlit mat is lighter and slightly washed out,
+   as in real sun. White type stays white there.
+
+   It's part of the scene, so it scrolls with the mat. On narrow screens the
+   scene keeps a minimum size, anchored to the window side. */
+.light,
+.sun {
+  --scene: max(100%, 900px);
   position: absolute;
   inset: 0;
+  z-index: 5;
   overflow: hidden;
   pointer-events: none;
 }
 
+.light {
+  mix-blend-mode: multiply;
+  background:
+    url("/light/scene.webp") right top / var(--scene) auto no-repeat,
+    rgb(176 180 196);
+}
+
+.sun {
+  mix-blend-mode: screen;
+  background:
+    url("/light/glow.webp") right top / var(--scene) auto no-repeat,
+    #000;
+}
+
 .light::before,
-.light::after {
+.light::after,
+.sun::before,
+.sun::after {
   content: "";
   position: absolute;
-  inset: -9vmax;
-  z-index: 5;
-  will-change: translate, rotate, opacity;
+  top: 0;
+  right: 0;
+  width: var(--scene);
+  aspect-ratio: 4 / 5;
+  background: 0 0 / 100% 100% no-repeat;
+  will-change: translate, rotate;
 }
 
-.light::before {
-  mix-blend-mode: multiply;
-  background: repeating-linear-gradient(150deg,
-        rgb(255 255 255) 1vmax,
-        rgb(255 255 255) 1vmax,
-        rgb(245 246 250) 3.25vmax,
-        rgb(220 224 238) 5.5vmax,
-        rgb(194 203 225) 7.75vmax,
-        rgb(184 194 220) 10vmax,
-        rgb(194 203 225) 12.25vmax,
-        rgb(220 224 238) 14.5vmax,
-        rgb(245 246 250) 16.75vmax,
-        rgb(255 255 255) 19vmax,
-        rgb(255 255 255) 43vmax,
-        rgb(248 249 251) 45vmax,
-        rgb(229 233 242) 47vmax,
-        rgb(211 218 233) 49vmax,
-        rgb(204 211 230) 51vmax,
-        rgb(211 218 233) 53vmax,
-        rgb(229 233 242) 55vmax,
-        rgb(248 249 251) 57vmax,
-        rgb(255 255 255) 59vmax,
-        rgb(255 255 255) 76vmax,
-        rgb(245 247 250) 78.5vmax,
-        rgb(221 226 238) 81vmax,
-        rgb(197 206 227) 83.5vmax,
-        rgb(188 197 222) 86vmax,
-        rgb(197 206 227) 88.5vmax,
-        rgb(221 226 238) 91vmax,
-        rgb(245 247 250) 93.5vmax,
-        rgb(255 255 255) 96vmax,
-        rgb(255 255 255) 96vmax);
+/* The tree outside: big soft dapples, swaying slowly */
+.light::before,
+.sun::before {
+  background-image: url("/light/far.webp");
+  transform-origin: 110% -10%;
   animation:
-    drift 11s ease-in-out infinite alternate,
-    sway 17s ease-in-out infinite alternate,
-    shade 13s ease-in-out infinite alternate;
+    dapple-sway 11s ease-in-out infinite alternate,
+    dapple-drift 7.3s ease-in-out infinite alternate;
 }
 
-.light::after {
-  mix-blend-mode: screen;
-  background: repeating-linear-gradient(150deg,
-        rgb(0 0 0) 1vmax,
-        rgb(0 0 0) 20vmax,
-        rgb(1 7 16) 22.75vmax,
-        rgb(5 24 56) 25.5vmax,
-        rgb(9 41 96) 28.25vmax,
-        rgb(10 48 112) 31vmax,
-        rgb(9 41 96) 33.75vmax,
-        rgb(5 24 56) 36.5vmax,
-        rgb(1 7 16) 39.25vmax,
-        rgb(0 0 0) 42vmax,
-        rgb(0 0 0) 60vmax,
-        rgb(1 6 13) 62vmax,
-        rgb(4 19 45) 64vmax,
-        rgb(7 33 76) 66vmax,
-        rgb(8 38 90) 68vmax,
-        rgb(7 33 76) 70vmax,
-        rgb(4 19 45) 72vmax,
-        rgb(1 6 13) 74vmax,
-        rgb(0 0 0) 76vmax,
-        rgb(0 0 0) 96vmax);
+/* The plant on the sill: sharper sprigs, swaying and fluttering */
+.light::after,
+.sun::after {
+  background-image: url("/light/near.webp");
+  transform-origin: 104% 3%;
   animation:
-    drift 11s ease-in-out infinite alternate,
-    sway 17s ease-in-out infinite alternate,
-    glow 7s ease-in-out infinite alternate;
+    leaf-sway 4.7s ease-in-out infinite alternate,
+    leaf-flutter 2.9s ease-in-out infinite alternate;
+}
+
+/* In the sun's glow the same leaves are black: they block it */
+.sun::before,
+.sun::after {
+  filter: brightness(0);
 }
 
 /* Wear on the mat: grain, specks and fine scratches. It lies over the grid
@@ -712,36 +699,43 @@ main,
   --d: 0.5s;
 }
 
-/* Across the bands (150deg), not along them */
-@keyframes drift {
+@keyframes dapple-sway {
   from {
-    translate: -2.9vmax -5vmax;
+    rotate: -0.6deg;
   }
 
   to {
-    translate: 2.9vmax 5vmax;
+    rotate: 0.6deg;
   }
 }
 
-@keyframes sway {
+@keyframes dapple-drift {
   from {
-    rotate: -0.4deg;
+    translate: -0.4vmax 0.3vmax;
   }
 
   to {
-    rotate: 0.4deg;
-  }
-}
-
-@keyframes shade {
-  to {
-    opacity: 0.8;
+    translate: 0.4vmax -0.3vmax;
   }
 }
 
-@keyframes glow {
+@keyframes leaf-sway {
+  from {
+    rotate: -2deg;
+  }
+
   to {
-    opacity: 0.6;
+    rotate: 1.6deg;
+  }
+}
+
+@keyframes leaf-flutter {
+  from {
+    translate: 0.15vmax -0.1vmax;
+  }
+
+  to {
+    translate: -0.2vmax 0.15vmax;
   }
 }
 
