@@ -116,20 +116,27 @@ body {
   font-kerning: normal;
 }
 
-/* Light through a window: soft bands of light and shade fall across the
-   mat and drift slowly, with a couple of pools of brighter light. They're
-   fixed to the screen, so the mat slides under them as the page scrolls.
-   They lie over the grid and the panels but under the text. At their
-   brightest, white text still has 4.5:1 contrast. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: -10vmax;
+/* Light through a window falls across the mat: soft bands of light and
+   shade, with a couple of faint pools of brighter light. It's part of the
+   scene, so it scrolls with the mat, and it drifts slowly in place. It lies
+   over the grid and the panels but under the text. At its brightest, white
+   text still has 4.5:1 contrast. The frame clips the drifting layer so its
+   edges never show. */
+.light {
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  overflow: hidden;
   pointer-events: none;
+}
+
+.light::before {
+  content: "";
+  position: absolute;
+  inset: -6vmax;
   background:
-    radial-gradient(42vmax 26vmax at 72% 28%, rgb(30 145 255 / 0.06), transparent 70%),
-    radial-gradient(36vmax 24vmax at 18% 78%, rgb(30 145 255 / 0.06), transparent 70%),
+    radial-gradient(42vmax 26vmax at 72% 32vmax, rgb(30 145 255 / 0.06), transparent 70%),
+    radial-gradient(36vmax 24vmax at 18% 92vmax, rgb(30 145 255 / 0.06), transparent 70%),
     repeating-linear-gradient(150deg,
         rgb(0 28 120 / 0.000) 1vmax,
         rgb(0 28 120 / 0.073) 3.25vmax,
@@ -683,7 +690,7 @@ main,
 
 @keyframes light {
   0% {
-    transform: translate3d(-1.5vmax, -2.6vmax, 0) rotate(-0.6deg);
+    transform: translate3d(-1.5vmax, -2.6vmax, 0) rotate(-0.3deg);
   }
 
   50% {
@@ -691,7 +698,7 @@ main,
   }
 
   100% {
-    transform: translate3d(1.5vmax, 2.6vmax, 0) rotate(0.6deg);
+    transform: translate3d(1.5vmax, 2.6vmax, 0) rotate(0.3deg);
   }
 }
 
