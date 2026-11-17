@@ -39,8 +39,8 @@
 :root {
   color-scheme: dark;
 
-  --mat: #447054;
-  --line: #dcffe9;
+  --mat: #2858b8;
+  --line: #d6e6ff;
   --chalk: #ffffff;
 
   /* Characters the display face lacks (e.g. ’) fall back to the sans. */
@@ -116,18 +116,98 @@ body {
   font-kerning: normal;
 }
 
-/* Wear on the mat: grain, specks and fine scratches, plus a little light
-   catching the top corner. It lies over the grid and the panels but under
-   their text, so the type stays crisp, and lets the pointer through. */
+/* Light from a window falls across the mat: a patch of warm sun through a
+   six-pane window, whose bar shadows are crisp near the window and soften
+   with distance, and cool ambient light everywhere else, fading away from
+   the window. A plant on the sill and a tree outside cast leaf shadows that
+   sway in the breeze; the window light itself holds still.
+
+   Like real light it falls on everything on the board (mat, lines, wear,
+   panels and type): the whole layer multiplies the page. Sunlit areas show
+   the mat's true colour, a touch warm. The leaves composite inside the
+   layer, so a leaf can only take sun down to ambient, never darker. Even in
+   the dimmest ambient light, white text keeps at least 4.5:1 contrast.
+
+   The sun also lifts the mat a little where it falls (a screen layer, cut
+   by the same leaves), so sunlit mat is lighter and slightly washed out,
+   as in real sun. White type stays white there.
+
+   It's part of the scene, so it scrolls with the mat. On narrow screens the
+   scene keeps a minimum size, anchored to the window side. */
+.light,
+.sun {
+  --scene: max(100%, 900px);
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.light {
+  mix-blend-mode: multiply;
+  background:
+    url("/light/scene.webp") right top / var(--scene) auto no-repeat,
+    rgb(176 180 196);
+}
+
+.sun {
+  mix-blend-mode: screen;
+  background:
+    url("/light/glow.webp") right top / var(--scene) auto no-repeat,
+    #000;
+}
+
+.light::before,
+.light::after,
+.sun::before,
+.sun::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--scene);
+  aspect-ratio: 4 / 5;
+  background: 0 0 / 100% 100% no-repeat;
+  will-change: translate, rotate;
+}
+
+/* The tree outside: big soft dapples, swaying slowly */
+.light::before,
+.sun::before {
+  background-image: url("/light/far.webp");
+  transform-origin: 110% -10%;
+  animation:
+    dapple-sway 11s ease-in-out infinite alternate,
+    dapple-drift 7.3s ease-in-out infinite alternate;
+}
+
+/* The plant on the sill: sharper sprigs, swaying and fluttering */
+.light::after,
+.sun::after {
+  background-image: url("/light/near.webp");
+  transform-origin: 104% 3%;
+  animation:
+    leaf-sway 4.7s ease-in-out infinite alternate,
+    leaf-flutter 2.9s ease-in-out infinite alternate;
+}
+
+/* In the sun's glow the same leaves are black: they block it */
+.sun::before,
+.sun::after {
+  filter: brightness(0);
+}
+
+/* Wear on the mat: grain, specks and fine scratches. It lies over the grid
+   and the panels but under their text, so the type stays crisp, and lets
+   the pointer through. */
 body::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background:
-    radial-gradient(1100px 700px at 0 0, rgb(255 255 255 / 0.07), transparent 70%),
-    url("/mat.svg") 0 0 / 960px 960px;
+  background: url("/mat.svg") 0 0 / 960px 960px;
 }
 
 h1,
@@ -340,6 +420,10 @@ main,
      down a little to look centred in its panel. */
   padding: calc(var(--name-size) * 0.2) var(--pad) 0;
   text-decoration: none;
+  /* Above the light and the wear, so a hovered row is clean white. The
+     rows never overlap, so this doesn't change which one is hovered. */
+  position: relative;
+  z-index: 4;
   --name-size: clamp(34px, calc(var(--cell) * 1.05), 56px);
 }
 
@@ -574,17 +658,14 @@ main,
   }
 }
 
-/* Motion: the ✱ and panels cut out of the grid one after another, then
-   their contents rise in. A product's link never moves (only what's inside
-   it), so its hover area stays put under a still pointer. */
-
-.panel {
-  animation: knock 0.7s var(--ease-out) var(--d, 0s) backwards;
-}
+/* Motion: the panels are there from the start; their contents (the ✱ and
+   all the type) rise in one after another, coming into focus as they go.
+   A product's link never moves (only what's inside it), so its hover area
+   stays put under a still pointer. */
 
 .panel > :not(.project),
 .project > * {
-  animation: rise 0.9s var(--ease-out) calc(var(--d, 0s) + 0.1s) backwards;
+  animation: rise 0.8s var(--ease-out) var(--d, 0s) backwards;
 }
 
 .home {
@@ -615,16 +696,53 @@ main,
   --d: 0.5s;
 }
 
-@keyframes knock {
+@keyframes dapple-sway {
   from {
-    background-color: transparent;
+    rotate: -0.6deg;
+  }
+
+  to {
+    rotate: 0.6deg;
   }
 }
 
+@keyframes dapple-drift {
+  from {
+    translate: -0.4vmax 0.3vmax;
+  }
+
+  to {
+    translate: 0.4vmax -0.3vmax;
+  }
+}
+
+@keyframes leaf-sway {
+  from {
+    rotate: -2deg;
+  }
+
+  to {
+    rotate: 1.6deg;
+  }
+}
+
+@keyframes leaf-flutter {
+  from {
+    translate: 0.15vmax -0.1vmax;
+  }
+
+  to {
+    translate: -0.2vmax 0.15vmax;
+  }
+}
+
+/* A gentle softness that scales with the type: about 1px for body text,
+   4px for product names, 6px for the heading. */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(8px);
+    filter: blur(min(0.06em, 6px));
   }
 }
 
