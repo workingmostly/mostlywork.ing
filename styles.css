@@ -658,17 +658,14 @@ main,
   }
 }
 
-/* Motion: the ✱ and panels cut out of the grid one after another, then
-   their contents rise in. A product's link never moves (only what's inside
-   it), so its hover area stays put under a still pointer. */
-
-.panel {
-  animation: knock 0.7s var(--ease-out) var(--d, 0s) backwards;
-}
+/* Motion: the panels are there from the start; their contents (the ✱ and
+   all the type) rise in one after another, coming into focus as they go.
+   A product's link never moves (only what's inside it), so its hover area
+   stays put under a still pointer. */
 
 .panel > :not(.project),
 .project > * {
-  animation: rise 0.9s var(--ease-out) calc(var(--d, 0s) + 0.1s) backwards;
+  animation: rise 1s var(--ease-out) var(--d, 0s) backwards;
 }
 
 .home {
@@ -739,16 +736,13 @@ main,
   }
 }
 
-@keyframes knock {
-  from {
-    background-color: transparent;
-  }
-}
-
+/* The blur scales with the type, so body text softens by a few pixels and
+   the heading by more, up to 20px. */
 @keyframes rise {
   from {
     opacity: 0;
     transform: translateY(16px);
+    filter: blur(min(0.2em, 20px));
   }
 }
 
