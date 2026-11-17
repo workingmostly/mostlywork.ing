@@ -39,8 +39,8 @@
 :root {
   color-scheme: dark;
 
-  --mat: #447054;
-  --line: #dcffe9;
+  --mat: #2d5c96;
+  --line: #dcebff;
   --chalk: #ffffff;
 
   /* Characters the display face lacks (e.g. ’) fall back to the sans. */
