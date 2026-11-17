@@ -133,10 +133,19 @@ body {
    as in real sun. White type stays white there.
 
    It's part of the scene, so it scrolls with the mat. On narrow screens the
-   scene keeps a minimum size, anchored to the window side. */
+   scene keeps a minimum size, anchored to the window side. Scene sizes are
+   in thousandths of its width.
+
+   On load the room starts overcast (the ambient light is drawn here, so
+   it's there at once), then the sun comes out from behind a cloud: the
+   window's patch of sun, its glow and the leaf shadows fade up together as
+   the type settles. The images are preloaded and small, so they're almost
+   always in by then. The leaves sit on canvases that reach well past the
+   page and fade out before their edges, so swaying never shows an edge. */
 .light,
 .sun {
-  --scene: max(100%, 900px);
+  --scene: max(100cqw, 900px);
+  --sun-in: sun-in 2.2s ease-in-out 0.5s backwards;
   position: absolute;
   inset: 0;
   z-index: 5;
@@ -144,18 +153,37 @@ body {
   pointer-events: none;
 }
 
+/* Ambient light, a touch cooler and dimmer away from the window */
 .light {
   mix-blend-mode: multiply;
   background:
-    url("/light/scene.webp") right top / var(--scene) auto no-repeat,
+    radial-gradient(135% 108% at 110% -8%, rgb(184 187 204), rgb(182 186 203) 25%, rgb(180 184 200) 50%, rgb(177 181 197) 75%, rgb(176 180 196))
+      right top / var(--scene) calc(var(--scene) * 1.25) no-repeat,
     rgb(176 180 196);
 }
 
 .sun {
   mix-blend-mode: screen;
-  background:
-    url("/light/glow.webp") right top / var(--scene) auto no-repeat,
-    #000;
+  background: #000;
+}
+
+/* The window's patch of sun: warm light over the ambient, and its glow */
+.patch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--scene);
+  aspect-ratio: 4 / 5;
+  background: 0 0 / 100% 100% no-repeat;
+  animation: var(--sun-in);
+}
+
+.light .patch {
+  background-image: url("/light/patch.webp");
+}
+
+.sun .patch {
+  background-image: url("/light/glow.webp");
 }
 
 .light::before,
@@ -164,32 +192,40 @@ body {
 .sun::after {
   content: "";
   position: absolute;
-  top: 0;
-  right: 0;
-  width: var(--scene);
-  aspect-ratio: 4 / 5;
   background: 0 0 / 100% 100% no-repeat;
-  will-change: translate, rotate;
+  will-change: translate, rotate, opacity;
 }
 
-/* The tree outside: big soft dapples, swaying slowly */
+/* The tree outside: big soft dapples, swaying slowly. Canvas: x -200 to
+   1200, y -350 to 1000; it sways about (1100, -125). */
 .light::before,
 .sun::before {
+  top: calc(var(--scene) * -0.35);
+  right: calc(var(--scene) * -0.2);
+  width: calc(var(--scene) * 1.4);
+  height: calc(var(--scene) * 1.35);
   background-image: url("/light/far.webp");
-  transform-origin: 110% -10%;
+  transform-origin: 92.86% 16.67%;
   animation:
     dapple-sway 11s ease-in-out infinite alternate,
-    dapple-drift 7.3s ease-in-out infinite alternate;
+    dapple-drift 7.3s ease-in-out infinite alternate,
+    var(--sun-in);
 }
 
-/* The plant on the sill: sharper sprigs, swaying and fluttering */
+/* The plant on the sill: sharper sprigs, swaying and fluttering. Canvas:
+   x 350 to 1200, y -300 to 750; it sways about its base at (1040, 40). */
 .light::after,
 .sun::after {
+  top: calc(var(--scene) * -0.3);
+  right: calc(var(--scene) * -0.2);
+  width: calc(var(--scene) * 0.85);
+  height: calc(var(--scene) * 1.05);
   background-image: url("/light/near.webp");
-  transform-origin: 104% 3%;
+  transform-origin: 81.18% 32.38%;
   animation:
     leaf-sway 4.7s ease-in-out infinite alternate,
-    leaf-flutter 2.9s ease-in-out infinite alternate;
+    leaf-flutter 2.9s ease-in-out infinite alternate,
+    var(--sun-in);
 }
 
 /* In the sun's glow the same leaves are black: they block it */
@@ -694,6 +730,13 @@ main,
 
 .colophon p {
   --d: 0.5s;
+}
+
+/* The sun coming out from behind a cloud */
+@keyframes sun-in {
+  from {
+    opacity: 0;
+  }
 }
 
 @keyframes dapple-sway {
